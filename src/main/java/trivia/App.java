@@ -10,7 +10,7 @@ public class App
 {
     public static void main( String[] args )
     {
-      Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "franco", "franco");
+      Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "ezequiel", "ezequiel");
 
       User u = new User();
       u.set("username", "Maradona");
