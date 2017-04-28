@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class UserTest{
     @Before
     public void before(){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia_test", "ezequiel", "ezequiel");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia_test", "proyecto", "felipe");
         System.out.println("UserTest setup");
         Base.openTransaction();
     }
