@@ -1,7 +1,8 @@
 CREATE TABLE users (
-  id  int(11) auto_increment PRIMARY KEY,
+  id  int(11) NOT NULL auto_increment PRIMARY KEY,
   username  VARCHAR(128),
   password  VARCHAR(128),
+  score decimal(8,2),
   created_at DATETIME,
   updated_at DATETIME
 )ENGINE=InnoDB;

@@ -6,9 +6,7 @@ CREATE TABLE questions (
   answer2 VARCHAR(256),
   answer3 VARCHAR(256),
   answer4 VARCHAR(256),
-  rightans INTEGER,  
+  rightans smallint,  
   created_at DATETIME,
-  updated_at DATETIME,
-  CHECK (rightans>0 && rightans<5),
-  FOREIGN KEY (category_id) REFERENCES categories(id)
+  updated_at DATETIME
 )ENGINE=InnoDB;

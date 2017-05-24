@@ -1,7 +1,7 @@
-CREATE TABLE categories (
+CREATE TABLE games (
   id  int(11) NOT NULL auto_increment PRIMARY KEY,
-  cat_name enum('Deporte','Ciencia','Historia'),
-  description  VARCHAR(128),
+  user_id  int(11),
+  status boolean,
   created_at DATETIME,
   updated_at DATETIME
 )ENGINE=InnoDB;
