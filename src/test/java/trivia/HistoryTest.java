@@ -9,26 +9,19 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class UserTest{
+public class HistoryTest{
     @Before
     public void before(){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia_test", "proyecto", "felipe");
-        System.out.println("UserTest setup");
+        System.out.println("HistoryTest setup");
         Base.openTransaction();
     }
 
     @After
     public void after(){
-        System.out.println("UserTest tearDown");
+        System.out.println("HistoryTest tearDown");
         Base.rollbackTransaction();
         Base.close();
     }
 
-
-    @Test
-    public void validatePrescenceOfUsernames(){
-        User user = new User();
-        user.set("username", "");
-        assertEquals(user.isValid(), false);
-    }
 }
