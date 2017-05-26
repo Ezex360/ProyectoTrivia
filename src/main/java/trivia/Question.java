@@ -9,4 +9,10 @@ public class Question extends Model {
     validatePresenceOf("answer2").message("Please, provide the category name");
     validatePresenceOf("rightans").message("Please, provide the category name");
   }
+
+  public Boolean verificarRespuesta(Integer res){
+  	return (getInteger("rightans") == res);
+
+  }
+
 }
