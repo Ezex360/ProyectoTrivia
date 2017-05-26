@@ -2,6 +2,11 @@ package trivia;
 
 import org.javalite.activejdbc.Base;
 import static spark.Spark.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import spark.ModelAndView;
+import spark.template.mustache.MustacheTemplateEngine;
 
 import trivia.User;
 import trivia.Category;
@@ -14,42 +19,35 @@ public class App{
     public static void main( String[] args ){
 
       Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+      
+      get("/hello", (req, res) -> {
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
 
-      User u = new User();
-      u.set("username", "Ezex360");
-      u.set("password", "ratamanase123");
-      u.saveIt();
+        Map map = new HashMap();
 
-      User u2 = new User();
-      u2.set("username", "Joax360");
-      u2.set("password", "ojalapupu");
-      u2.saveIt();
+        Game g = Game.findFirst("id = ?",1);
+        map.put("game_id", g.get("id"));
+        Base.close();  
 
-      Category category = new Category();
-      category.set("cat_name", "Deporte");
-      category.saveIt();
-
-      Question question = new Question();
-      question.set("question", "Quien es el mejor equipo?");
-      question.set("category_id", category.get("id"));
-      question.set("answer1", "River");
-      question.set("answer2", "Boca");
-      question.set("rightans", 2);
-      question.saveIt();
-
-      Game game = new Game();
-      game.set("user_id",u.get("id"));
-      game.set("status",true);
-      game.saveIt();
-
-       get("/hello", (req, res) -> "Hello World");
+        return new ModelAndView(map, "./views/test.mustache");
+      }, new MustacheTemplateEngine());
 
       Base.close();
 
 
       }
+/*
+      get("/games/:id/question/:question-id", (req, res) => { 
+        Map map = new HashMap();
 
+        res,
+      })
 
+     post("/games/:id/anwerquestion", (req, res) => {
+        Game g = Game.find("id = ?", req.params(":id"))
+        Question q = Question.find("id = ?", req.queryParams("question"))
+      });
+*/
       public void answerQuestion(Game g,Question q,Integer res){
         Boolean ans = q.verificarRespuesta(res);
         if (!ans)
