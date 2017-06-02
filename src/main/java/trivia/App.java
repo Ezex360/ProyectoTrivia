@@ -2,8 +2,11 @@ package trivia;
 
 import org.javalite.activejdbc.Base;
 import static spark.Spark.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
@@ -20,6 +23,7 @@ public class App{
 
       Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
       
+      //Test
       get("/hello", (req, res) -> {
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
 
@@ -32,6 +36,41 @@ public class App{
         return new ModelAndView(map, "./views/test.mustache");
       }, new MustacheTemplateEngine());
 
+      //Recibir usuario.
+      get("/register", (req, res) -> {
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Map map = new HashMap();
+        Base.close();  
+
+        return new ModelAndView(null, "./views/register.mustache");
+      }, new MustacheTemplateEngine());
+
+      //Cargar Usuario
+      post("/register", (req, res) -> {
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Map map = new HashMap();
+        String usern = req.queryParams("username");
+        String pass = req.queryParams("password");
+
+        User user = new User();
+        user.set("username",usern);
+        user.set("password",pass);
+        user.saveIt();
+        Base.close();
+        return new ModelAndView(map, "./views/test.mustache");
+      }, new MustacheTemplateEngine());
+
+/*      
+
+      post("/games/:id/anwerquestion", (req, res) => {
+        Game g = Game.find("id = ?", req.params(":id"));
+        Question q = randomQuest();
+
+
+      });
+
+    */ 
+
       Base.close();
 
 
@@ -42,13 +81,26 @@ public class App{
 
         res,
       })
+  
+    SELECT * FROM users ORDER BY RAND() LIMIT 1;
+        Question q = stm.executeQuery("SELECT * FROM users ORDER BY RAND() LIMIT 1");
 
-     post("/games/:id/anwerquestion", (req, res) => {
-        Game g = Game.find("id = ?", req.params(":id"))
-        Question q = Question.find("id = ?", req.queryParams("question"))
-      });
+        Random rand = new Random();
+        long questionsCount = Question.count();
+        int  questionRand = rand.nextInt(questionsCount) + 1;
+
+  
 */
-      public void answerQuestion(Game g,Question q,Integer res){
+      private static Question randomQuest(){
+        List<Question> questions  = Question.findBySQL("SELECT * FROM questions ORDER BY RAND() LIMIT 1");
+        Question q = questions.get(0);
+        System.out.println(q.getInteger("id"));
+        return q;
+      }
+
+
+
+      private void answerQuestion(Game g,Question q,Integer res){
         Boolean ans = q.verificarRespuesta(res);
         if (!ans)
           g.restarVida();
@@ -59,26 +111,4 @@ public class App{
         record.set("isCorrect",ans);
         record.saveIt();
       }
-
-      // List<User> users = User.where("username = ?", "Maradona");
-      // User u = users.get(0);
-      // g.set("user1_id", u.get("id"));
-      // User u2 = User.findFirst("username = ?", "Pele");
-      // g.set("user2_id", u2.get("id"));
-      // g.saveIt();
-
-
-      // g.getQuestion()
-      // g.answerQuestio(USEr, Question, OPtion)
-
-      //Map map = new HashMap();
-      //map.put("name", "Sam");
-      //map.put("value", 1000);
-      //map.put("taxed_value", 1000 - (1000 * 0.4));
-      //map.put("in_ca", true);
-
-      //get("/hello", (req, res) -> {
-      //  return new ModelAndView(map, "./views/test.mustache");
-      //}, new MustacheTemplateEngine()
-      //);
 }
