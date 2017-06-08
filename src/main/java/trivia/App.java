@@ -24,17 +24,19 @@ public class App{
       Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
       
       //Test
-      get("/hello", (req, res) -> {
+      get("/test/:id", (req, res) -> {
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
 
         Map map = new HashMap();
-
-        Game g = Game.findFirst("id = ?",1);
-        map.put("game_id", g.get("id"));
-        Base.close();  
-
-        return new ModelAndView(map, "./views/test.mustache");
-      }, new MustacheTemplateEngine());
+        User u = User.findFirst("id = ?", req.params(":id"));
+        System.out.println("\n Id: "+req.params(":id")+"\n");
+        map.put("user_id", u.get("id"));
+        Base.close();
+  
+        return new MustacheTemplateEngine().render(
+          new ModelAndView(map, "./views/test.mustache")
+        );
+      });
 
       //Recibir usuario.
       get("/register", (req, res) -> {
@@ -42,8 +44,10 @@ public class App{
         Map map = new HashMap();
         Base.close();  
 
-        return new ModelAndView(null, "./views/register.mustache");
-      }, new MustacheTemplateEngine());
+        return new MustacheTemplateEngine().render(
+          new ModelAndView(map, "./views/register.mustache")
+        );
+      });
 
       //Cargar Usuario
       post("/register", (req, res) -> {
@@ -57,9 +61,11 @@ public class App{
         user.set("password",pass);
         user.saveIt();
         Base.close();
-        return new ModelAndView(map, "./views/test.mustache");
-      }, new MustacheTemplateEngine());
 
+        Integer id = user.getInteger("id");
+        res.redirect("/test/"+id);
+        return null;
+      });
 /*      
 
       post("/games/:id/anwerquestion", (req, res) => {
