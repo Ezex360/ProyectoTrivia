@@ -17,9 +17,11 @@ import trivia.Question;
 import trivia.History;
 import trivia.Game;
 
-public class App{
+ class App{
 
-    public static void main( String[] args ){
+     public static void main( String[] args ){
+
+      staticFileLocation("/public");
 
       Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
       
@@ -34,7 +36,7 @@ public class App{
         Base.close();
   
         return new MustacheTemplateEngine().render(
-          new ModelAndView(map, "./views/test.mustache")
+          new ModelAndView(map, "test.mustache")
         );
       });
 
@@ -45,11 +47,10 @@ public class App{
         Base.close();  
 
         return new MustacheTemplateEngine().render(
-          new ModelAndView(map, "./views/register.mustache")
+          new ModelAndView(map, "index.html")
         );
       });
 
-      //Cargar Usuario
       post("/register", (req, res) -> {
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         Map map = new HashMap();

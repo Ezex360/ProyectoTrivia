@@ -1,0 +1,5 @@
+<h1 style="text-align: center;"><span style="color: #ff0000;">Pagina principal</span></h1>
+<form action="/register" autocomplete="on" method="post">
+<h3 style="text-align: left;">Usuario: &nbsp; &nbsp; &nbsp;&nbsp; <input name="username" type="text" /><br /> Contrase&ntilde;a: <input name="password" type="text" /></h3>
+<input class="button" type="submit" value="Log in" /></form>
+<p><input class="button" type="submit" value="Registrarse" /></p>
