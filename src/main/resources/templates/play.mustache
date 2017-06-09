@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Pregunta2 - Play</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <p><a href="">
+      {{question}}
+    </a></p>
+  </div>
+  
+  <div>
+    <form action="/play" autocomplete="on" method="post">
+      <input class="button" type="submit" value="{{option1}}" name="option1">
+      <input class="button" type="submit" value="{{option2}}" name="option2">
+      <input class="button" type="submit" value="{{option3}}" name="option3">
+      <input class="button" type="submit" value="{{option4}}" name="option4">
+    </form>
+  </div>
+
+
+</body>
+</html>
+

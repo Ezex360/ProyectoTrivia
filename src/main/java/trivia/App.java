@@ -22,8 +22,11 @@ import trivia.Game;
      public static void main( String[] args ){
         staticFileLocation("/public");
         
+
+
         handleRegister();
         handleWelcome();
+        handlePlay();
         handleMenu();
 
       }
@@ -51,35 +54,122 @@ import trivia.Game;
             new ModelAndView(null, "index.html")
           );
         });
+        post("/register", (req, res) -> {
+          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+          String usern = req.queryParams("username");
+          String pass = req.queryParams("password");
+
+          User user = new User();
+          user.set("username",usern);
+          user.set("password",pass);
+          user.saveIt();
+          Base.close();
+
+          res.redirect("/welcome");
+          return null;
+        });
+        post("/login", (req, res) -> {
+          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+          String usern = req.queryParams("username");
+          String pass = req.queryParams("password");
+          User user = User.findFirst("username = ?", usern);
+          Base.close();
+          if (user != null)
+            if (pass.equals(user.getString("password"))){
+              req.session(true);
+              req.session().attribute("user_id",user.getInteger("id"));  
+              res.redirect("/menu");
+            }
+            else res.redirect("/welcome");
+          else res.redirect("/welcome");
+
+          return null;
+        });
       }
 
       private static void handleMenu(){
         //Muestra el menu
         get("/menu", (req, res) -> {
+          if (req.session().attribute("user_id") == null)
+            res.redirect("/welcome"); 
           return new MustacheTemplateEngine().render(
             new ModelAndView(null, "menu.mustache")
           );
         });
         //Recibe la opcion elegida
         post("/menu", (req, res) -> {
+          if (req.session().attribute("user_id") == null)
+            res.redirect("/welcome");
           String value1 = req.queryParams("option1");
           String value2 = req.queryParams("option2");
           String value3 = req.queryParams("option3");
-          if (value1 != null)
-            res.redirect("/question");
+          if (value1 != null){
+            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+            Integer user_id = req.session().attribute("user_id");
+            List<Game> games  = 
+              Game.findBySQL("SELECT * FROM games WHERE(user_id = "+user_id+" AND status = true)");
+            if (games.isEmpty()){
+              //TODO
+            }
+            req.session().attribute("game_id",games.get(0).getInteger("id"));
+            Base.close();
+            res.redirect("/play");
+          }
           if (value2 != null)
             res.redirect("/score");
-          if (value3 != null)
+          if (value3 != null){
+            req.session().removeAttribute("user_id");
             res.redirect("/welcome");
+          }
           return null;
         });        
       }
 
+      private static void handlePlay(){
+        //PLAY:ID ES NECESARIO
+        get("/play", (req, res) -> {
+          if (req.session().attribute("user_id") == null
+            || req.session().attribute("game_id") == null)
+            res.redirect("/welcome");
+          Question quest = randomQuest();
+          Map map = new HashMap();
+          map.put("question",quest.getString("question"));
+          map.put("option1",quest.getString("answer1"));
+          map.put("option2",quest.getString("answer2"));
+          map.put("option3",quest.getString("answer3"));
+          map.put("option4",quest.getString("answer4"));
+          return new MustacheTemplateEngine().render(
+            new ModelAndView(map, "play.mustache")
+          );
+        });
+        post("/play", (req, res) -> {
+          if (req.session().attribute("user_id") == null
+            || req.session().attribute("game_id") == null)
+            res.redirect("/welcome");
+          Integer ans;
+          String value1 = req.queryParams("option1");
+          String value2 = req.queryParams("option2");
+          String value3 = req.queryParams("option3");
+          String value4 = req.queryParams("option4");
+          if (value1!=null)
+            ans = 1;
+          if (value2!=null)
+            ans = 2;
+          if (value3!=null)
+            ans = 3;
+          if (value4!=null)
+            ans = 4;
+          System.out.println(quest.getString("question"));
+          return null;
+        });
+
+      }
 
       private static Question randomQuest(){
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         List<Question> questions  = Question.findBySQL("SELECT * FROM questions ORDER BY RAND() LIMIT 1");
         Question q = questions.get(0);
-        System.out.println(q.getInteger("id"));
+        Base.close();
         return q;
       }
 
