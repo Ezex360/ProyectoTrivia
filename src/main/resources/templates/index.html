@@ -5,10 +5,18 @@
   <title>Pregunta2 - Trivia App</title>
   <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" href="css/style.css">
 
-  
-      <link rel="stylesheet" href="css/style.css">
-
+  <script>
+  function validateRegForm() {
+      var x = document.forms["register"]["username"].value;
+      var y = document.forms["register"]["password"].value;
+      if (x != "" && y != "") {
+          alert("User correctly created");
+          return true;
+      }
+  }
+  </script>
   
 </head>
 
@@ -30,7 +38,7 @@
         <div id="signup">   
           <h1>Sign Up</h1>
           
-          <form action="/register" method="post">
+          <form name="register" action="/register" onsubmit="return validateRegForm()" method="post">
           
           <div class="field-wrap">
             <label>

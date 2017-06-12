@@ -22,32 +22,12 @@ import trivia.Game;
      public static void main( String[] args ){
         staticFileLocation("/public");
         
-
-
-        handleRegister();
         handleWelcome();
         handlePlay();
         handleMenu();
 
       }
-
-      private static void handleRegister(){
-        post("/register", (req, res) -> {
-          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
-          String usern = req.queryParams("username");
-          String pass = req.queryParams("password");
-
-          User user = new User();
-          user.set("username",usern);
-          user.set("password",pass);
-          user.saveIt();
-          Base.close();
-
-          res.redirect("/menu");
-          return null;
-        });
-      }
-
+      
       private static void handleWelcome(){
         get("/welcome", (req, res) -> {
           return new MustacheTemplateEngine().render(
@@ -62,7 +42,7 @@ import trivia.Game;
           User user = new User();
           user.set("username",usern);
           user.set("password",pass);
-          user.saveIt();
+          user.save();
           Base.close();
 
           res.redirect("/welcome");
@@ -159,7 +139,6 @@ import trivia.Game;
             ans = 3;
           if (value4!=null)
             ans = 4;
-          System.out.println(quest.getString("question"));
           return null;
         });
 
@@ -182,7 +161,7 @@ import trivia.Game;
         record.set("game_id",g.get("id"));
         record.set("question_id",q.get("id"));
         record.set("isCorrect",ans);
-        record.saveIt();
+        record.save();
       }
 /*      
       post("/games/:id/anwerquestion", (req, res) => {

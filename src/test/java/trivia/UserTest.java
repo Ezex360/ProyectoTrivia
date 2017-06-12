@@ -24,11 +24,19 @@ public class UserTest{
         Base.close();
     }
 
-
     @Test
     public void validatePrescenceOfUsernames(){
         User user = new User();
         user.set("username", "");
         assertEquals(user.isValid(), false);
+    }
+
+    @Test
+    public void validateUniquenessOfUsernames(){
+        new User().set("username", "Eze").saveIt();
+        // attempt creating another user with the same username
+        User u = new User();
+        u.set("username", "Eze").save();
+        assertEquals(u.isValid(), false);
     }
 }
