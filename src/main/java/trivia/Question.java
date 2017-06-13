@@ -11,7 +11,7 @@ public class Question extends Model {
   }
 
   public Boolean verificarRespuesta(Integer res){
-  	return (getInteger("rightans") == res);
+  	return (res.equals(getInteger("rightans")));
 
   }
 

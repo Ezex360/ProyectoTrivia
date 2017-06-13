@@ -1,5 +1,64 @@
-INSERT INTO games (created_at, status, updated_at, user_id) VALUES ('2017-05-26 11:50:46.042', true, '2017-05-26 11:50:46.042', 1);
-INSERT INTO questions (answer1, answer2, category_id, created_at, question, rightans, updated_at) VALUES ('River', 'Boca', 1, '2017-05-26 11:50:45.974', 'Quien es el mejor equipo', 2, '2017-05-26 11:50:45.974');
-INSERT INTO categories (cat_name, created_at, updated_at) VALUES ('Deporte', '2017-05-26 11:50:45.907', '2017-05-26 11:50:45.907');
-INSERT INTO users (created_at, password, updated_at, username) VALUES ('2017-05-26 11:50:45.859', 'ojalapupu', '2017-05-26 11:50:45.859', 'Joax360');
-INSERT INTO users (created_at, password, updated_at, username) VALUES ('2017-05-26 11:50:45.676', 'ratamanase123', '2017-05-26 11:50:45.676', 'Ezex360');
+INSERT INTO categories (cat_name, created_at, updated_at) VALUES 
+('ARTE Y LITERATURA', NOW(), NOW()),
+('CIENCIA Y TECNOLOGÍA', NOW(), NOW()), 
+('DEPORTES', NOW(), NOW()),
+('HISTORIA', NOW(), NOW()),
+('GEOGRAFIA', NOW(), NOW()),
+('ENTRETENIMIENTO', NOW(), NOW());
+
+INSERT INTO questions (category_id,question,answer1,answer2,answer3,answer4,rightans,created_at, updated_at) VALUES 
+(1,' ¿Quién pintó el cuado "El jardín de las delicias"?','El Bosco','Carvaggio','Velázquez','Arcimboldo',1,NOW(),NOW()),
+(1,'¿Quién vivía en el 221B de Backer Street? ','Sherlock Holmes ','Truman Capote ','Philip Marlowe ','Arthur Conan Doyle ',1,NOW(),NOW()),
+(1,'¿Quién es el autor de "El retrato de Dorian Gray"? ','Oscar Wilde ','Charles Dickens ','Arthur Conan Doyle ','George Orwell ',1,NOW(),NOW()),
+(1,'Gato con guantes... ','Y con botas ','No rasca bigotes ','No caza ratones ','No corre al trote ',3,NOW(),NOW()),
+(1,'¿Qué forma es característica de las plantas de las iglesias románicas? ','Óvalo ','Rectángulo ','Cruz ','Cuadrado ',3,NOW(),NOW()),
+(1,' ¿Qué odia Mafalda? ','El Pájaro Loco ','La sopa ','Los panqueques ','A Manolito ',2,NOW(),NOW()),
+(1,'¿Quién compuso la famosa canción "Bohemian Rhapsody? ','John Lennon ','Elton John ','Freddie Mercury ','David Bowie ',3,NOW(),NOW()),
+(1,'¿Qué animal quería ser domesticado por El Principito? ','Un perro  ','Un zorro ','Un gato ','Un lobo ',2,NOW(),NOW()),
+(2,'¿Qué droga de diseño,también conocida como MDMA, es análoga a la metanfetamina? ','Polvo de ángel ','Crack ','Éxtasis  ','Popper ',3,NOW(),NOW()),
+(2,'¿Cuál es la ciencia que estudia la aplicación de la informática y las comunicaciones al hogar? ','Robótica ','Domótica ','Casática ','Autología ',2,NOW(),NOW()),
+(2,'¿Qué sonido hace un elefante? ','Brugen ','Gruñen ','Baritan ','Gritan ',3,NOW(),NOW()),
+(2,'¿Cuál es la fórmula química del agua? ','HO ','HO2 ','H2O ','Agu ',3,NOW(),NOW()),
+(2,' ¿Cómo se llama la página web más famosa en la que se puede visualizar videos de todo tipo? ','CineTube ','Glooge ','VideoTube ','YouTube',4,NOW(),NOW()),
+(2,'¿Cómo se llama el sistema operativo con el que trabajan los teléfonos HTC,LG,Samsung? ','iOS ','Microsoft ','Ubuntu ','Android ',4,NOW(),NOW()),
+(2,'¿Qué marca creó en 2007 el primer iPhone? ','Apple ','Nokia ','Mac ','Android ',1,NOW(),NOW()),
+(2,'¿Qué animal representa al Sistema Operativo Linux? ','León ','Panda ','Pinguino  ','Leopardo ',3,NOW(),NOW()),
+(2,'¿Cuál es la combinación de las teclas que copia texto en un PC? ','ctrl + p ','ctrl + c ','ctrl + q ','ctrl + v ',2,NOW(),NOW()),
+(3,'¿De que deporte es el kemari uno de los principales antecesores?  ','Fútbol ','Ténis ','Rugby ','Karate ',1,NOW(),NOW()),
+(3,' ¿Cuántas puntas de cada color hay en un tablero de backgammon? ','8 ','12 ','14 ','16 ',2,NOW(),NOW()),
+(3,' ¿En qué país se inventó el voleibol? ','Gran Bretaña ','Francia ','Rusia ','Estados Unidos ',4,NOW(),NOW()),
+(3,'¿Qué selección acumula mayor cantidad de expulsados en  mundiales de fútbol? ','Argentina ','Brasil ','Italia ','Camerún ',1,NOW(),NOW()),
+(3,'¿Cuántos puntos vale un tiro libre encestado en baloncesto? ','Uno ','Dos ','Tres ','Depende ',1,NOW(),NOW()),
+(3,'¿Cuánto dura un partido de fútbol? ','90 minutos ','45 minutos ','75 minutos','80 minutos ',1,NOW(),NOW()),
+(3,'¿De qué nacionalidad es el entrenador de fútbol Tata Martino? ','Italia ','Argentina ','España ','Brasil ',2,NOW(),NOW()),
+(4,'¿A qué país pertenece la isla de Tasmania? ','Estados Unidos ','Australia ','Portugal ','Ninguna es correcta ',2,NOW(),NOW()),
+(4,'¿En cuál de los siguientes países NO hay ningún desierto? ','España ','Chile ','Mongolia ','Alemania ',4,NOW(),NOW()),
+(4,'¿Cuál es principal celebración holandesa? ','Navidad ','La llegada del verano ','El día de la Reina ','Hallowen ',3,NOW(),NOW()),
+(4,'¿Cuál de las siguientes especialidades NO es típica de la cocina estadounidense? ','La hamburguesa ','El pastel de cangrejo ','La tarta de manzana ','Todas son típicas',4,NOW(),NOW()),
+(4,' ¿Con cuántos países limita Argentina? ','Tres ','Cuatro ','Cinco ','Seis ',3,NOW(),NOW()),
+(4,'¿Cuál es la capital de Japón? ','Tokio ','Kyoto ','Pekin ','Ninguna es correcta ',1,NOW(),NOW()),
+(4,'¿Dónde creció Sigmund Freud ? ','París ','Munich ','Kiev ','Viena ',4,NOW(),NOW()),
+(4,'¿En qué continente queda Chile? ','Asia ','América ','Europa ','Africa ',2,NOW(),NOW()),
+(5,'¿Con qué emperador estuvo casada Cleopatra? ','Ptolomeo XIV ','Julio César ',' Marco Antonio','Todas son correctas ',4,NOW(),NOW()),
+(5,'¿Quién liberó a Argentina, Chile y Perú? ','Ernesto Che Guevara ','Manual Belgrano ','José de San Martín ','Simón Bolívar ',3,NOW(),NOW()),
+(5,'¿Dónde surgió la filosofía? ','Grecia ','España ','Egipto ','Japón ',1,NOW(),NOW()),
+(5,'Los cuatro evangelistas de la Biblia son Mateo, Marcos, Lucas y... ','Antonio ','Jésus ','José ','Juan ',4,NOW(),NOW()),
+(5,'¿De qué color es el humo que informa a los creyentes de que se ha elegido un Papa nuevo? ','Negro ','Rojo ','Amarillo ','Blanco ',4,NOW(),NOW()),
+(5,'¿Maria Antonieta fue reina de qué país? ','Francia ','Nunca fue reina ','Países Bajos ','Reino Unido ',1,NOW(),NOW()),
+(5,'¿En qué viaje Colón encontró a los Mayas? ','Primero ','Segundo ','Tercero ','Cuarto ',4,NOW(),NOW()),
+(5,'¿Cuántos mandamientos hay en el cristianismo? ','9 ','10 ','11 ','12 ',2,NOW(),NOW()),
+(5,'¿Cuál era el nombre de pila de Putin(Presidente de Rusia)? ','Vladímir ','Aléksey ','Iósif ','Aleksandr ',1,NOW(),NOW()),
+(6,'¿Por cuál de estas películas ganó Clint Eastwood el premio Oscar al mejor director? ','Million Dollar Baby ','Cartas desde Iwo Jima ','Mystic River','Los puentes de Madison ',4,NOW(),NOW()),
+(6,'¿Cómo se llamaba el personaje que interpretaba Al Pacino en "Scarface"? ','Sonny Montana ','Tony Montana ','Michael Corleone ','Frank Slade',2,NOW(),NOW()),
+(6,'¿Cuál es considerado por los fans el peor juego de la historia de ATARI? ','Tetris ','ET ','Combat ','Galaxian ',2,NOW(),NOW()),
+(6,'¿A qué película de Disney pertenece la canción "Un mundo ideal"? ','Aladdín ','Pocahontas ','Mulán ','Hércules ',1,NOW(),NOW()),
+(6,'¿A quién se considera el Rey del Pop? ','Justin Bieber ','Michael Jackson ','Zayn Malik ','Zac Efron ',2,NOW(),NOW()),
+(6,' ¿Qué personaje del videojuego Mortal Kombat tiene poderes de hielo? ','Sub-Zero ','Scorpion ','Reptile ','Motaro ',1,NOW(),NOW()),
+(6,' ¿Qué día es San Valentín?','14 de Marzo  ','5 de Febrero  ','14 de Febrero ','15 de Marzo ',3,NOW(),NOW()),
+(6,'¿Cómo se llama el actor protagonista de "Mi pobre Angelito"? ','Macaulay Culkin ','Keanu Reeves ','Johnny Depp ','Leonardo DiCaprio ',1,NOW(),NOW()),
+(6,'¿Cómo se llama el pájaro símbolo de los Juegos del Hambre? ','Lechuza ','Sinsajo ','Gale ','Llamas  ',1,NOW(),NOW()),
+(6,'¿Cuántos colores tiene un cubo de Rubik clásico? ','4 ','6 ','8 ','9 ',2,NOW(),NOW());
+
+
+
+

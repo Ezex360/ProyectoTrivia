@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Pregunta2 - Play</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <p><a>
+      Su respuesta fue {{res}}
+    </a></p>
+    <p style="font-size: 72px">
+      Le quedan {{lifes}} vidas
+    </p>
+  </div>
+  
+  <div>
+    <form action="/result" autocomplete="on" method="post">
+      <input class="button" type="submit" value="Otra pregunta!" name="option1">
+      <input class="button" type="submit" value="Volver al menu" name="option2">
+    </form>
+  </div>
+
+</body>
+</html>

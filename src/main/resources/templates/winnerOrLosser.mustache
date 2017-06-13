@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Pregunta2 - Play</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <form action="/incorrect" autocomplete="on" method="get">
+    <div class="container">
+      <p><a>
+        {{result}}
+      </a></p>
+    </div>
+  </form>
+  
+  <div>
+    <form action="/final" autocomplete="on" method="post">
+      <input class="button" type="submit" value="Iniciar Nuevo Juego" name="option1">
+      <input class="button" type="submit" value="Consultar puntaje" name="option2">
+      <input class="button" type="submit" value="Volver al menu" name="option3">
+    </form>
+  </div>
+
+</body>
+</html>
