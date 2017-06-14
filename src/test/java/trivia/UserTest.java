@@ -33,10 +33,11 @@ public class UserTest{
 
     @Test
     public void validateUniquenessOfUsernames(){
-        new User().set("username", "Eze").saveIt();
+        User u1 = new User();
+        u1.set("username", "Eze").save();
         // attempt creating another user with the same username
-        User u = new User();
-        u.set("username", "Eze").save();
-        assertEquals(u.isValid(), false);
+        User u2 = new User();
+        u2.set("username", "Eze").save();
+        assertEquals(u2.isValid(), false);
     }
 }

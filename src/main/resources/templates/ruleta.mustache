@@ -31,7 +31,7 @@
         <script type="text/javascript" src="../../Winwheel.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     </head>
-    <body>
+    <body style='background:#1ab188'>
         <div align="center">
             <div >
               <p style="font-size:72px;color:black;">
@@ -182,27 +182,27 @@
                 alert("Responderas una pregunta de " + winningSegment.text);
                 if (winningSegment.text == "ARTE" )
                 {
-                    window.location.replace("/category/1");
+                    window.location.replace("/category/:1");
                 }
                 else if (winningSegment.text == "CIENCIA" )
                 {
-                    window.location.replace("/category/2");
+                    window.location.replace("/category/:2");
                 }
                 else if (winningSegment.text == "DEPORTES" )
                 {
-                    window.location.replace("/category/3");
+                    window.location.replace("/category/:3");
                 }
                 else if (winningSegment.text == "HISTORIA" )
                 {
-                    window.location.replace("/category/4");
+                    window.location.replace("/category/:4");
                 }
                 else if (winningSegment.text == "GEOGRAFIA" )
                 {
-                    window.location.replace("/category/5");
+                    window.location.replace("/category/:5");
                 }
                 else if (winningSegment.text == "RECREACION" )
                 {
-                    window.location.replace("/category/6");
+                    window.location.replace("/category/:6");
                 }
                 else
                   window.location.replace("/PageError");
