@@ -9,7 +9,4 @@ public class User extends Model {
     validateWith(new UniquenessValidator("username")).message("This username is already taken.");
   }
 
-  public float obtenerPuntaje(){
-  	return (getFloat("score"));
-  }
 }

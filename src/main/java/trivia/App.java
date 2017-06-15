@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+import java.math.BigDecimal;
 
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
@@ -30,36 +30,47 @@ import trivia.Game;
         handleResponse();
         handleRoulete();
         handleEnd();
-        
+
       }
 
 
-      
+      //
       private static void handleWelcome(){
+      	get("/", (req, res) -> {
+          res.redirect("/welcome");
+          return null;
+        });
         get("/welcome", (req, res) -> {
+          Map map = new HashMap();
           return new MustacheTemplateEngine().render(
-            new ModelAndView(null, "index.mustache")
+            new ModelAndView(map, "index.mustache")
           );
         });
         post("/register", (req, res) -> {
           Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
           String usern = req.queryParams("username");
           String pass = req.queryParams("password");
+          Map map = new HashMap();
 
-          User user = new User();
-          user.set("username",usern);
-          user.set("password",pass);
-          user.set("score",0.0);
-          if(!user.isValid())
-            System.out.println("\n NO ES VALIDO WACHIN \n");
-          user.save();
-          Base.close();
+          Long repetido = User.count("username = ?",usern);
+          if (repetido != 0)
+          	map.put("error_register",true);
+          else
+          	map.put("register_ok",true);
+            User user = new User();
+            user.set("username",usern);
+            user.set("password",pass);
+            user.set("score",0.0);
+            user.save();
+            Base.close();
 
-          res.redirect("/welcome");
-          return null;
+          return new MustacheTemplateEngine().render(
+            new ModelAndView(map, "index.mustache")
+          );
         });
         post("/login", (req, res) -> {
           Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+          Map map = new HashMap();
           String usern = req.queryParams("username");
           String pass = req.queryParams("password");
           User user = User.findFirst("username = ?", usern);
@@ -70,10 +81,10 @@ import trivia.Game;
               req.session().attribute("user_id",user.getInteger("id"));  
               res.redirect("/menu");
             }
-            else res.redirect("/welcome");
-          else res.redirect("/welcome");
-
-          return null;
+          map.put("error_login",true);
+          return new MustacheTemplateEngine().render(
+            new ModelAndView(map, "index.mustache")
+          );
         });
       }
 
@@ -99,9 +110,9 @@ import trivia.Game;
             req.session().attribute("game_id",game.getInteger("id"));
             res.redirect("/ruleta");
           }
-          if (value2 != null)
+          else if (value2 != null)
             res.redirect("/score");
-          if (value3 != null){
+          else if (value3 != null){
             req.session().removeAttribute("user_id");
             res.redirect("/welcome");
           }
@@ -208,8 +219,7 @@ import trivia.Game;
 
 
       private static void handleResponse(){
-        get("/correct", (req,res) -> {
-         
+        get("/correct", (req,res) -> {         
           Map map = new HashMap();
           Integer id_g = req.session().attribute("game_id");
           Game g = gameBySession(id_g);
@@ -265,6 +275,7 @@ import trivia.Game;
 
       private static void handleEnd(){
         post("/final", (req,res) -> {
+          req.session().removeAttribute("game_id");
           String value1 = req.queryParams("option1");
           String value2 = req.queryParams("option2");
           String value3 = req.queryParams("option3");
@@ -288,7 +299,7 @@ import trivia.Game;
           Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
           User u=User.findFirst("id=?",user_id);
           Base.close();
-          Float score=calculateScore(user_id);
+          String score=calculateScore(user_id);
           Map map=new HashMap();
           map.put("user_score",score);
           return new MustacheTemplateEngine().render(
@@ -340,38 +351,50 @@ import trivia.Game;
         return win;
       }
 
-      private static Float calculateScore(Integer user_id){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
-        User u = User.findFirst("id = ?",user_id);
-        String cantCorrectas = "select histories.* from histories join games on (game_id = games.id)"+
-        " where (histories.user_id = "+user_id+" and status = false and isCorrect = true)";
-        String cantRespuestas = "select histories.* from histories join games on (game_id = games.id)"+
-        " where (histories.user_id = "+user_id+" and status = false)";
-        List<History> listaCorrectas = History.findBySQL(cantCorrectas);
-        List<History> listaTotal = History.findBySQL(cantRespuestas);
-        Integer correctas = listaCorrectas.size();
-        Integer total = listaCorrectas.size();
-        Float finalScore;
-        if (total == 0)
-          finalScore = new Float(0);
-        else{
-          finalScore = (float) correctas / total;
-          u.set("score",finalScore);
-          u.save();
-        }
-        Base.close(); 
-        return finalScore;
+      private static String calculateScore(Integer user_id){        
+        BigDecimal finalScore = BigDecimal.ZERO;
+        try{
+          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+          User u = User.findFirst("id = ?",user_id);
+          java.sql.Connection connection = Base.connection();
+          String cantCorrectas = "select count(isCorrect) from histories where "+
+          "(user_id = "+user_id+" and isCorrect = true) group by user_id";
+          Statement st1 = connection.createStatement();
+          ResultSet resultSet1 =st1.executeQuery(cantCorrectas);
+          BigDecimal correctas = BigDecimal.ZERO;
+          while(resultSet1.next()){
+            correctas = new BigDecimal(resultSet1.getInt(1));
+          }
+          String cantTotal = "select count(*) from histories where "+
+          "(user_id = "+user_id+") group by user_id";
+          Statement st2 = connection.createStatement();
+          ResultSet resultSet2 =st2.executeQuery(cantTotal);
+          BigDecimal total = BigDecimal.ZERO;
+          while(resultSet2.next()){
+            total = new BigDecimal(resultSet2.getInt(1));
+          }
+          if (total.compareTo(BigDecimal.ZERO) > 0){
+            finalScore = correctas.divide(total,5,BigDecimal.ROUND_DOWN);
+            BigDecimal hundread = new BigDecimal(100);
+            finalScore = finalScore.multiply(hundread);
+            finalScore = finalScore.setScale(2, BigDecimal.ROUND_HALF_UP);
+          if (finalScore.compareTo(hundread) < 0){
+              u.set("score", finalScore.toString());
+              u.save();
+            }         
+          }
+          Base.close();
+        } catch(SQLException sqle) {
+          sqle.printStackTrace();
+          System.err.println("Error connecting: " + sqle);
+        }; 
+        return finalScore.toString();
       }
 
 
 
       private static Question randomQuest(Integer cat_id){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
-        List<Question> questions  = Question.findBySQL("SELECT * FROM questions WHERE"+
-        " (category_id = "+cat_id+")ORDER BY RAND() LIMIT 1");
-        Question q = questions.get(0);
-        Base.close();
-        return q;
+        
       }
 
       private static Question questById(Integer id){
@@ -433,5 +456,3 @@ import trivia.Game;
 
 }
       
-// (1,' ',' ',' ',' ',' ',1,Now(),Now()),
-
