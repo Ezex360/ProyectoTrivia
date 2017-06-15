@@ -34,18 +34,20 @@ import trivia.Game;
       }
 
 
-      //
+      //Metodos para el manejo de inicio de sesion
       private static void handleWelcome(){
       	get("/", (req, res) -> {
           res.redirect("/welcome");
           return null;
         });
+        //Muestra la pagina principal
         get("/welcome", (req, res) -> {
           Map map = new HashMap();
           return new MustacheTemplateEngine().render(
             new ModelAndView(map, "index.mustache")
           );
         });
+        //Permite el registro de nuevo usuario
         post("/register", (req, res) -> {
           Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
           String usern = req.queryParams("username");
@@ -55,19 +57,20 @@ import trivia.Game;
           Long repetido = User.count("username = ?",usern);
           if (repetido != 0)
           	map.put("error_register",true);
-          else
+          else{
           	map.put("register_ok",true);
             User user = new User();
             user.set("username",usern);
             user.set("password",pass);
             user.set("score",0.0);
             user.save();
-            Base.close();
-
+          }
+          Base.close();
           return new MustacheTemplateEngine().render(
             new ModelAndView(map, "index.mustache")
           );
         });
+        //Permite el ingreso de un usuario al sistema
         post("/login", (req, res) -> {
           Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
           Map map = new HashMap();
@@ -88,6 +91,7 @@ import trivia.Game;
         });
       }
 
+      //Permite el manejo de las opciones del juego
       private static void handleMenu(){
         //Muestra el menu
         get("/menu", (req, res) -> {
@@ -104,14 +108,17 @@ import trivia.Game;
           String value1 = req.queryParams("option1");
           String value2 = req.queryParams("option2");
           String value3 = req.queryParams("option3");
+          //Ingresa al juego
           if (value1 != null){
             Integer user_id = req.session().attribute("user_id");
             Game game = lastGame(user_id);
             req.session().attribute("game_id",game.getInteger("id"));
             res.redirect("/ruleta");
           }
+          //Consulta el puntaje
           else if (value2 != null)
             res.redirect("/score");
+          //Vuelve a la pagina de inicio
           else if (value3 != null){
             req.session().removeAttribute("user_id");
             res.redirect("/welcome");
@@ -120,7 +127,9 @@ import trivia.Game;
         });        
       }
 
+      //Elije categorias aleatorias
       public static void handleRoulete(){
+      	//Muestra la ruleta o el bonus
         get("/ruleta", (req,res) -> {
           if (req.session().attribute("user_id") == null
             || req.session().attribute("game_id") == null)
@@ -136,7 +145,11 @@ import trivia.Game;
             );
           }
         });
+        //Recibe la categoria y redirecciona al generador de preguntas aleatorias
         post("/categories", (req, res) -> {
+	      if (req.session().attribute("user_id") == null
+	        || req.session().attribute("game_id") == null)
+	        res.redirect("/welcome");
           String value1 = req.queryParams("option1");
           String value2 = req.queryParams("option2");
           String value3 = req.queryParams("option3");
@@ -160,23 +173,25 @@ import trivia.Game;
 
       }
 
+      //Funciones encargadas del juego
       private static void handlePlay(){
-        //PLAY:ID ES NECESARIO
+        //Genera pregunta aleatoria a partir del id de una categoria.
         get("/category/:id", (req, res) -> {
           if (req.session().attribute("user_id") == null
             || req.session().attribute("game_id") == null)
             res.redirect("/welcome");
           Integer cat_id = Integer.parseInt(req.params(":id").substring(1));
           Integer user_id = req.session().attribute("user_id");
-          Question quest = randomQuest(cat_id,user_id);
+          Question quest = randomQuest(cat_id,user_id); 
           Integer id_q = quest.getInteger("id");
           res.redirect("/play/:"+id_q);
           return null;
-        });        
+        });       
+        //Muestra la pregunta pasada por parametro.
         get("/play/:id", (req, res) -> {
           if (req.session().attribute("user_id") == null
             || req.session().attribute("game_id") == null)
-            res.redirect("/welcome");
+            res.redirect("/welcome"); 
           Question quest = questById(Integer.parseInt(req.params(":id").substring(1)));
           Map map = new HashMap();
           map.put("question",quest.getString("question"));
@@ -189,7 +204,7 @@ import trivia.Game;
             new ModelAndView(map, "play.mustache")
           );
         });
-        //fijar opcion nula?
+        //Comprueba que la pregunta pasada sea correcta.
         post("/play/:id", (req, res) -> {
           if (req.session().attribute("user_id") == null
             || req.session().attribute("game_id") == null)
@@ -208,7 +223,7 @@ import trivia.Game;
             ans = 3;
           else
             ans = 4;
-          Integer id_g = req.session().attribute("game_id");
+          Integer id_g = req.session().attribute("game_id"); 
           boolean isCorrect = answerQuestion(gameBySession(id_g),quest,ans);
           if (isCorrect) 
             res.redirect("/correct");
@@ -218,15 +233,16 @@ import trivia.Game;
         });
       }
 
-
+      //Maneja si una respuesta es correcta o no.
       private static void handleResponse(){
+      	//Acciones de una respuesta correcta.
         get("/correct", (req,res) -> {         
           Map map = new HashMap();
           Integer id_g = req.session().attribute("game_id");
           Game g = gameBySession(id_g);
           map.put("res"," Correcta!");
           map.put("lifes",g.getInteger("lifes"));
-          if (youWin(g)){
+          if (youWin(g)){ 
             map.put("result","Ganaste :)");
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
             g.set("status",false);
@@ -241,6 +257,7 @@ import trivia.Game;
             );
           }
         });
+        //Acciones de una respuesta incorrecta.
         get("/incorrect", (req,res) -> {
           Map map = new HashMap();
           Integer id_g = req.session().attribute("game_id");
@@ -263,6 +280,7 @@ import trivia.Game;
             );
           }
         });
+        //Permite volver al menu o seguir jugando
         post("/result", (req,res) -> {
           String value1 = req.queryParams("option1");
           String value2 = req.queryParams("option2");
@@ -274,15 +292,19 @@ import trivia.Game;
         });
       }
 
+      //Maneja el fin del juego
       private static void handleEnd(){
         post("/final", (req,res) -> {
           req.session().removeAttribute("game_id");
           String value1 = req.queryParams("option1");
           String value2 = req.queryParams("option2");
           String value3 = req.queryParams("option3");
-          if (value1!=null)
-            res.redirect("/ruleta");
-          if (value2!=null)
+          if (value1!=null){
+            Integer user_id = req.session().attribute("user_id");
+            Game game = lastGame(user_id);
+            req.session().attribute("game_id",game.getInteger("id"));
+            res.redirect("/ruleta"); 
+          }else if (value2!=null)
             res.redirect("/score");
           else 
             res.redirect("/menu");
@@ -291,6 +313,7 @@ import trivia.Game;
 
       }
 
+      //Muestra el puntaje.
       private static void showScore(){
         get("/score", (req, res) ->{
           if (req.session().attribute("user_id") == null)
@@ -307,7 +330,6 @@ import trivia.Game;
             new ModelAndView(map, "score.mustache")
           );
         });
-
         post("/score", (req, res) ->{
           res.redirect("/menu");
           return null;
@@ -357,32 +379,38 @@ import trivia.Game;
         try{
           Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
           User u = User.findFirst("id = ?",user_id);
+          //Creo la conexion
           java.sql.Connection connection = Base.connection();
+          //Query del conteo de correctas.
           String cantCorrectas = "select count(isCorrect) from histories where "+
           "(user_id = "+user_id+" and isCorrect = true) group by user_id";
           Statement st1 = connection.createStatement();
           ResultSet resultSet1 =st1.executeQuery(cantCorrectas);
           BigDecimal correctas = BigDecimal.ZERO;
+          //Obtengo preguntas respuestas correctamente en ese juego.
           while(resultSet1.next()){
             correctas = new BigDecimal(resultSet1.getInt(1));
           }
+          //Query del conteo de preguntas respuestas.
           String cantTotal = "select count(*) from histories where "+
           "(user_id = "+user_id+") group by user_id";
           Statement st2 = connection.createStatement();
           ResultSet resultSet2 =st2.executeQuery(cantTotal);
           BigDecimal total = BigDecimal.ZERO;
+          //Obtengo preguntas respuestas en ese juego.
           while(resultSet2.next()){
             total = new BigDecimal(resultSet2.getInt(1));
           }
+          //Calculo el porcentaje de aciertos
           if (total.compareTo(BigDecimal.ZERO) > 0){
             finalScore = correctas.divide(total,5,BigDecimal.ROUND_DOWN);
             BigDecimal hundread = new BigDecimal(100);
             finalScore = finalScore.multiply(hundread);
             finalScore = finalScore.setScale(2, BigDecimal.ROUND_HALF_UP);
-          if (finalScore.compareTo(hundread) < 0){
-              u.set("score", finalScore.toString());
-              u.save();
-            }         
+	        if (finalScore.compareTo(hundread) < 0){
+	            u.set("score", finalScore.toString());
+	            u.save();
+	          }         
           }
           Base.close();
         } catch(SQLException sqle) {
@@ -393,7 +421,7 @@ import trivia.Game;
       }
 
 
-
+      //Genera una pregunta aleatoria no respuesta anteriormente si es posible
       private static Question randomQuest(Integer cat_id,Integer user_id){
       	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         List<Question> q = Question.findBySQL("SELECT * FROM questions where (category_id="+cat_id+") and"+
@@ -413,6 +441,7 @@ import trivia.Game;
 		return quest;
       }
 
+      //Devuelve una pregunta con un id de parametro
       private static Question questById(Integer id){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         Question q = Question.findFirst("id = ?", id);
@@ -420,13 +449,14 @@ import trivia.Game;
         return q;
       }
 
+      //Retorna el ultimo juego activo, en caso de no existir, crea uno nuevo.
       private static Game lastGame(Integer user_id){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         Game g;
         List<Game> games  = 
           Game.findBySQL("SELECT * FROM games WHERE(user_id = "+user_id+" AND status = true)");
         if (games.isEmpty()){
-          g = new Game(); //MARK
+          g = new Game(); 
           g.set("user_id",user_id);
           g.save();
         }else
@@ -435,13 +465,15 @@ import trivia.Game;
         return g;
       }    
 
+      //Obtiene el juego con id pasada por paremetro.
       private static Game gameBySession(Integer game_id){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         Game g = Game.findFirst("id = ?", game_id);
-        Base.close();
+        Base.close(); 
         return g;
       }
 
+      //Verifica si tuvo 3 respuestas correctas consecutivas.
       private static boolean onFire(Integer game_id){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         Game g = Game.findFirst("id = ?", game_id);
@@ -450,6 +482,7 @@ import trivia.Game;
         return fire;
       }
 
+      //Verifica si la respuesta a la pregunta en ese juego es correcta y la carga al historial.
       private static boolean answerQuestion(Game g,Question q,Integer res){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         Boolean ans = q.verificarRespuesta(res);
