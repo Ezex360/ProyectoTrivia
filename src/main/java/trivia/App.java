@@ -400,8 +400,16 @@ import trivia.Game;
 		" questions.id not in "+
 		"(select question_id from histories join games on (game_id = games.id) "+
 		"where (status=true and histories.user_id="+user_id+")) Order by rand() LIMIT 1");
-		Question quest = q.get(0);
-		Base.close();
+        Question quest;
+        if (!q.isEmpty()){
+        		quest = q.get(0);
+        }
+        else{
+        	List<Question> q1 = Question.findBySQL("SELECT * FROM questions where (category_id="+cat_id+")"+
+        	" Order by rand() LIMIT 1");
+        	quest = q1.get(0);
+        }	
+        Base.close();
 		return quest;
       }
 
