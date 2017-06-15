@@ -167,7 +167,8 @@ import trivia.Game;
             || req.session().attribute("game_id") == null)
             res.redirect("/welcome");
           Integer cat_id = Integer.parseInt(req.params(":id").substring(1));
-          Question quest = randomQuest(cat_id);
+          Integer user_id = req.session().attribute("user_id");
+          Question quest = randomQuest(cat_id,user_id);
           Integer id_q = quest.getInteger("id");
           res.redirect("/play/:"+id_q);
           return null;
@@ -393,8 +394,15 @@ import trivia.Game;
 
 
 
-      private static Question randomQuest(Integer cat_id){
-        
+      private static Question randomQuest(Integer cat_id,Integer user_id){
+      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        List<Question> q = Question.findBySQL("SELECT * FROM questions where (category_id="+cat_id+") and"+
+		" questions.id not in "+
+		"(select question_id from histories join games on (game_id = games.id) "+
+		"where (status=true and histories.user_id="+user_id+")) Order by rand() LIMIT 1");
+		Question quest = q.get(0);
+		Base.close();
+		return quest;
       }
 
       private static Question questById(Integer id){
