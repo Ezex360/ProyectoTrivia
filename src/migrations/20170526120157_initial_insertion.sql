@@ -81,7 +81,7 @@ INSERT INTO questions (category_id,question,answer1,answer2,answer3,answer4,righ
 (6,' ¿Qué día es San Valentín?','14 de Marzo  ','5 de Febrero  ','14 de Febrero ','15 de Marzo ',3,NOW(),NOW()),
 (6,'¿Cómo se llama el actor protagonista de "Mi pobre Angelito"? ','Macaulay Culkin ','Keanu Reeves ','Johnny Depp ','Leonardo DiCaprio ',1,NOW(),NOW()),
 (6,'¿Cómo se llama el pájaro símbolo de los Juegos del Hambre? ','Lechuza ','Sinsajo ','Gale ','Llamas  ',2,NOW(),NOW()),
-(6,'¿Cuántos colores tiene un cubo de Rubik clásico? ','4 ','6 ','8 ','9 ',2,NOW(),NOW());
+(6,'¿Cuántos colores tiene un cubo de Rubik clásico? ','4 ','6 ','8 ','9 ',2,NOW(),NOW()),
 (6,'Arroz con leche me quiero casar con una señorita de… ','San Nicolás ','San Martin ','San Justo ','San José ',1,NOW(),NOW()),
 (6,'¿Quién es la mascota de SEGA? ','Sonic ','Mario ','Pac Man ','Ryu ',1,NOW(),NOW()),
 (6,'¿Cómo se llama el protagonista de la saga Indiana Jones? ','Jack Nicholson ','Michael Fox ','Harrison Ford ','Robin Williams ',3,NOW(),NOW()),
