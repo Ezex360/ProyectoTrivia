@@ -1,7 +1,6 @@
 package trivia.main;
 
 import trivia.model.User;
-import trivia.model.Game;
 import org.javalite.activejdbc.Base;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class Menu {
           //Ingresa al juego
           if (value1 != null){
             Integer user_id = req.session().attribute("user_id");
-            Game game = App.lastGame(user_id);
+            Game game = lastGame(user_id);
             req.session().attribute("game_id",game.getInteger("id"));
             res.redirect("/ruleta");
           }
@@ -46,5 +45,7 @@ public class Menu {
           return null;
         });        
       }
+
+
 
 }
