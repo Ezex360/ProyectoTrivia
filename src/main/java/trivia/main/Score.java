@@ -8,7 +8,7 @@ import static spark.Spark.*;
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
 
-public class Login {
+public class Score {
   
 
 }
