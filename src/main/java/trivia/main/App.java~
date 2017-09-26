@@ -7,29 +7,72 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.math.BigDecimal;
+
 
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
 
-public class FreePlay {
 import trivia.model.User;
 import trivia.model.Category;
 import trivia.model.Question;
 import trivia.model.History;
 import trivia.model.Game;
 
-public class FreePlay {
+ class App{
 
-	  public static void IndividualGame(){
-	  	Roulete();
-	  	Play();
-	  	AnswerResponse();
-	  	GameEnd();
-	  }
+     public static void main( String[] args ){
+        staticFileLocation("/public");
+        
+        Login.Welcome();
+        Menu.ShowMenu();
+        showScore();
+        handlePlay();
+        handleResponse();
+        handleRoulete();
+        handleEnd();
 
+      }
+
+ /*     //Permite el manejo de las opciones del juego
+      private static void handleMenu(){
+        //Muestra el menu
+        get("/menu", (req, res) -> {
+          if (req.session().attribute("user_id") == null)
+            res.redirect("/welcome"); 
+          return new MustacheTemplateEngine().render(
+            new ModelAndView(null, "menu.mustache")
+          );
+        });
+        //Recibe la opcion elegida
+        post("/menu", (req, res) -> {
+          if (req.session().attribute("user_id") == null)
+            res.redirect("/welcome");
+          String value1 = req.queryParams("option1");
+          String value2 = req.queryParams("option2");
+          String value3 = req.queryParams("option3");
+          //Ingresa al juego
+          if (value1 != null){
+            Integer user_id = req.session().attribute("user_id");
+            Game game = lastGame(user_id);
+            req.session().attribute("game_id",game.getInteger("id"));
+            res.redirect("/ruleta");
+          }
+          //Consulta el puntaje
+          else if (value2 != null)
+            res.redirect("/score");
+          //Vuelve a la pagina de inicio
+          else if (value3 != null){
+            req.session().removeAttribute("user_id");
+            res.redirect("/welcome");
+          }
+          return null;
+        });        
+      }
+      */
 
       //Elije categorias aleatorias
-      public static void Roulete(){
+      public static void handleRoulete(){
       	//Muestra la ruleta o el bonus
         get("/ruleta", (req,res) -> {
           if (req.session().attribute("user_id") == null
@@ -75,7 +118,7 @@ public class FreePlay {
       }
 
       //Funciones encargadas del juego
-      public static void Play(){
+      private static void handlePlay(){
         //Genera pregunta aleatoria a partir del id de una categoria.
         get("/category/:id", (req, res) -> {
           if (req.session().attribute("user_id") == null
@@ -83,7 +126,7 @@ public class FreePlay {
             res.redirect("/welcome");
           Integer cat_id = Integer.parseInt(req.params(":id").substring(1));
           Integer user_id = req.session().attribute("user_id");
-          Question quest = App.randomQuest(cat_id,user_id); 
+          Question quest = randomQuest(cat_id,user_id); 
           Integer id_q = quest.getInteger("id");
           res.redirect("/play/:"+id_q);
           return null;
@@ -93,7 +136,7 @@ public class FreePlay {
           if (req.session().attribute("user_id") == null
             || req.session().attribute("game_id") == null)
             res.redirect("/welcome"); 
-          Question quest = App.questById(Integer.parseInt(req.params(":id").substring(1)));
+          Question quest = questById(Integer.parseInt(req.params(":id").substring(1)));
           Map map = new HashMap();
           map.put("question",quest.getString("question"));
           map.put("option1",quest.getString("answer1"));
@@ -110,7 +153,7 @@ public class FreePlay {
           if (req.session().attribute("user_id") == null
             || req.session().attribute("game_id") == null)
             res.redirect("/welcome");
-          Question quest = App.questById(Integer.parseInt(req.params(":id").substring(1)));
+          Question quest = questById(Integer.parseInt(req.params(":id").substring(1)));
           Integer ans;
           String value1 = req.queryParams("option1");
           String value2 = req.queryParams("option2");
@@ -125,7 +168,7 @@ public class FreePlay {
           else
             ans = 4;
           Integer id_g = req.session().attribute("game_id"); 
-          boolean isCorrect = answerQuestion(App.gameBySession(id_g),quest,ans);
+          boolean isCorrect = answerQuestion(gameBySession(id_g),quest,ans);
           if (isCorrect) 
             res.redirect("/correct");
           else
@@ -135,12 +178,12 @@ public class FreePlay {
       }
 
       //Maneja si una respuesta es correcta o no.
-      public static void AnswerResponse(){
+      private static void handleResponse(){
       	//Acciones de una respuesta correcta.
         get("/correct", (req,res) -> {         
           Map map = new HashMap();
           Integer id_g = req.session().attribute("game_id");
-          Game g = App.gameBySession(id_g);
+          Game g = gameBySession(id_g);
           map.put("res"," Correcta!");
           map.put("lifes",g.getInteger("lifes"));
           if (youWin(g)){ 
@@ -162,7 +205,7 @@ public class FreePlay {
         get("/incorrect", (req,res) -> {
           Map map = new HashMap();
           Integer id_g = req.session().attribute("game_id");
-          Game g = App.gameBySession(id_g);
+          Game g = gameBySession(id_g);
           map.put("res"," incorrecta :(");
           Integer lifes = g.getInteger("lifes");
           map.put("lifes",lifes);
@@ -194,7 +237,7 @@ public class FreePlay {
       }
 
       //Maneja el fin del juego
-      public static void GameEnd(){
+      private static void handleEnd(){
         post("/final", (req,res) -> {
           req.session().removeAttribute("game_id");
           String value1 = req.queryParams("option1");
@@ -202,7 +245,7 @@ public class FreePlay {
           String value3 = req.queryParams("option3");
           if (value1!=null){
             Integer user_id = req.session().attribute("user_id");
-            Game game = App.lastGame(user_id);
+            Game game = lastGame(user_id);
             req.session().attribute("game_id",game.getInteger("id"));
             res.redirect("/ruleta"); 
           }else if (value2!=null)
@@ -211,30 +254,33 @@ public class FreePlay {
             res.redirect("/menu");
           return null;
         });
+
       }
 
-      //Verifica si la respuesta a la pregunta en ese juego es correcta y la carga al historial.
-      public static boolean answerQuestion(Game g,Question q,Integer res){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
-        Boolean ans = q.verificarRespuesta(res);
-        boolean fire;
-        if (!ans){
-          g.restarVida();
-          g.resetFire();
-        }else{
-          g.addFire();
-        }
-        History record = new History();
-        record.set("user_id",g.get("user_id"));
-        record.set("game_id",g.get("id"));
-        record.set("question_id",q.get("id"));
-        record.set("isCorrect",ans);
-        record.save();
-        Base.close();
-        return ans;
-      }  
+      //Muestra el puntaje.
+      private static void showScore(){
+        get("/score", (req, res) ->{
+          if (req.session().attribute("user_id") == null)
+            res.redirect("/welcome");
+          //Traigo el id del usuario
+          Integer user_id=req.session().attribute("user_id");
+          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+          User u=User.findFirst("id=?",user_id);
+          Base.close();
+          String score=calculateScore(user_id);
+          Map map=new HashMap();
+          map.put("user_score",score);
+          return new MustacheTemplateEngine().render(
+            new ModelAndView(map, "score.mustache")
+          );
+        });
+        post("/score", (req, res) ->{
+          res.redirect("/menu");
+          return null;
+        });   
+      }
 
-      public static boolean youWin(Game game){
+      private static boolean youWin(Game game){
         boolean win = true;
         try{
           Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
@@ -272,6 +318,104 @@ public class FreePlay {
         return win;
       }
 
+      private static String calculateScore(Integer user_id){        
+        BigDecimal finalScore = BigDecimal.ZERO;
+        try{
+          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+          User u = User.findFirst("id = ?",user_id);
+          //Creo la conexion
+          java.sql.Connection connection = Base.connection();
+          //Query del conteo de correctas.
+          String cantCorrectas = "select count(isCorrect) from histories where "+
+          "(user_id = "+user_id+" and isCorrect = true) group by user_id";
+          Statement st1 = connection.createStatement();
+          ResultSet resultSet1 =st1.executeQuery(cantCorrectas);
+          BigDecimal correctas = BigDecimal.ZERO;
+          //Obtengo preguntas respuestas correctamente en ese juego.
+          while(resultSet1.next()){
+            correctas = new BigDecimal(resultSet1.getInt(1));
+          }
+          //Query del conteo de preguntas respuestas.
+          String cantTotal = "select count(*) from histories where "+
+          "(user_id = "+user_id+") group by user_id";
+          Statement st2 = connection.createStatement();
+          ResultSet resultSet2 =st2.executeQuery(cantTotal);
+          BigDecimal total = BigDecimal.ZERO;
+          //Obtengo preguntas respuestas en ese juego.
+          while(resultSet2.next()){
+            total = new BigDecimal(resultSet2.getInt(1));
+          }
+          //Calculo el porcentaje de aciertos
+          if (total.compareTo(BigDecimal.ZERO) > 0){
+            finalScore = correctas.divide(total,5,BigDecimal.ROUND_DOWN);
+            BigDecimal hundread = new BigDecimal(100);
+            finalScore = finalScore.multiply(hundread);
+            finalScore = finalScore.setScale(2, BigDecimal.ROUND_HALF_UP);
+	        if (finalScore.compareTo(hundread) < 0){
+	            u.set("score", finalScore.toString());
+	            u.save();
+	          }         
+          }
+          Base.close();
+        } catch(SQLException sqle) {
+          sqle.printStackTrace();
+          System.err.println("Error connecting: " + sqle);
+        }; 
+        return finalScore.toString();
+      }
+
+
+      //Genera una pregunta aleatoria no respuesta anteriormente si es posible
+      private static Question randomQuest(Integer cat_id,Integer user_id){
+      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        List<Question> q = Question.findBySQL("SELECT * FROM questions where (category_id="+cat_id+") and"+
+		" questions.id not in "+
+		"(select question_id from histories join games on (game_id = games.id) "+
+		"where (status=true and histories.user_id="+user_id+")) Order by rand() LIMIT 1");
+        Question quest;
+        if (!q.isEmpty()){
+        		quest = q.get(0);
+        }
+        else{
+        	List<Question> q1 = Question.findBySQL("SELECT * FROM questions where (category_id="+cat_id+")"+
+        	" Order by rand() LIMIT 1");
+        	quest = q1.get(0);
+        }	
+        Base.close();
+		return quest;
+      }
+
+      //Devuelve una pregunta con un id de parametro
+      private static Question questById(Integer id){
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Question q = Question.findFirst("id = ?", id);
+        Base.close();
+        return q;
+      }
+
+      //Retorna el ultimo juego activo, en caso de no existir, crea uno nuevo.
+      private static Game lastGame(Integer user_id){
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Game g;
+        List<Game> games  = 
+          Game.findBySQL("SELECT * FROM games WHERE(user_id = "+user_id+" AND status = true)");
+        if (games.isEmpty()){
+          g = new Game(); 
+          g.set("user_id",user_id);
+          g.save();
+        }else
+          g = games.get(0);
+        Base.close();
+        return g;
+      }    
+
+      //Obtiene el juego con id pasada por paremetro.
+      private static Game gameBySession(Integer game_id){
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Game g = Game.findFirst("id = ?", game_id);
+        Base.close(); 
+        return g;
+      }
 
       //Verifica si tuvo 3 respuestas correctas consecutivas.
       private static boolean onFire(Integer game_id){
@@ -281,6 +425,27 @@ public class FreePlay {
         Base.close();
         return fire;
       }
-  
+
+      //Verifica si la respuesta a la pregunta en ese juego es correcta y la carga al historial.
+      private static boolean answerQuestion(Game g,Question q,Integer res){
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Boolean ans = q.verificarRespuesta(res);
+        boolean fire;
+        if (!ans){
+          g.restarVida();
+          g.resetFire();
+        }else{
+          g.addFire();
+        }
+        History record = new History();
+        record.set("user_id",g.get("user_id"));
+        record.set("game_id",g.get("id"));
+        record.set("question_id",q.get("id"));
+        record.set("isCorrect",ans);
+        record.save();
+        Base.close();
+        return ans;
+      }
 
 }
+      
