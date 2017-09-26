@@ -11,7 +11,6 @@ import java.util.Map;
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
 
-public class FreePlay {
 import trivia.model.User;
 import trivia.model.Category;
 import trivia.model.Question;

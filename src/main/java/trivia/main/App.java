@@ -25,11 +25,9 @@ import trivia.model.Game;
         staticFileLocation("/public");
         
         Login.Welcome();
-        Score.showScore();
-        
+        Score.showScore();        
         FreePlay.IndividualGame();
         Menu.ShowMenu();
-        showScore();
 
       }
       
