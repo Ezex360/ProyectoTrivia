@@ -1,6 +1,6 @@
-package trivia;
+package trivia.model;
 
-import trivia.User;
+import trivia.model.User;
 
 import org.javalite.activejdbc.Base;
 import org.junit.After;
@@ -9,20 +9,19 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class GameTest{
+public class HistoryTest{
     @Before
     public void before(){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia_test", "proyecto", "felipe");
-        System.out.println("GameTest setup");
+        System.out.println("HistoryTest setup");
         Base.openTransaction();
     }
 
     @After
     public void after(){
-        System.out.println("GameTest tearDown");
+        System.out.println("HistoryTest tearDown");
         Base.rollbackTransaction();
         Base.close();
     }
 
 }
-
