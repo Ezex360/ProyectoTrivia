@@ -1,4 +1,4 @@
-package trivia;
+package trivia.main;
 
 import org.javalite.activejdbc.Base;
 import java.sql.*;
@@ -9,22 +9,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.math.BigDecimal;
 
+
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
 
-import trivia.User;
-import trivia.Category;
-import trivia.Question;
-import trivia.History;
-import trivia.Game;
+import trivia.model.User;
+import trivia.model.Category;
+import trivia.model.Question;
+import trivia.model.History;
+import trivia.model.Game;
 
  class App{
 
      public static void main( String[] args ){
         staticFileLocation("/public");
         
-        handleWelcome();
-        handleMenu();
+        Login.Welcome();
+        Menu.ShowMenu();
         showScore();
         handlePlay();
         handleResponse();
@@ -33,65 +34,7 @@ import trivia.Game;
 
       }
 
-
-      //Metodos para el manejo de inicio de sesion
-      private static void handleWelcome(){
-      	get("/", (req, res) -> {
-          res.redirect("/welcome");
-          return null;
-        });
-        //Muestra la pagina principal
-        get("/welcome", (req, res) -> {
-          Map map = new HashMap();
-          return new MustacheTemplateEngine().render(
-            new ModelAndView(map, "index.mustache")
-          );
-        });
-        //Permite el registro de nuevo usuario
-        post("/register", (req, res) -> {
-          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
-          String usern = req.queryParams("username");
-          String pass = req.queryParams("password");
-          Map map = new HashMap();
-
-          Long repetido = User.count("username = ?",usern);
-          if (repetido != 0)
-          	map.put("error_register",true);
-          else{
-          	map.put("register_ok",true);
-            User user = new User();
-            user.set("username",usern);
-            user.set("password",pass);
-            user.set("score",0.0);
-            user.save();
-          }
-          Base.close();
-          return new MustacheTemplateEngine().render(
-            new ModelAndView(map, "index.mustache")
-          );
-        });
-        //Permite el ingreso de un usuario al sistema
-        post("/login", (req, res) -> {
-          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
-          Map map = new HashMap();
-          String usern = req.queryParams("username");
-          String pass = req.queryParams("password");
-          User user = User.findFirst("username = ?", usern);
-          Base.close();
-          if (user != null)
-            if (pass.equals(user.getString("password"))){
-              req.session(true);
-              req.session().attribute("user_id",user.getInteger("id"));  
-              res.redirect("/menu");
-            }
-          map.put("error_login",true);
-          return new MustacheTemplateEngine().render(
-            new ModelAndView(map, "index.mustache")
-          );
-        });
-      }
-
-      //Permite el manejo de las opciones del juego
+ /*     //Permite el manejo de las opciones del juego
       private static void handleMenu(){
         //Muestra el menu
         get("/menu", (req, res) -> {
@@ -126,6 +69,7 @@ import trivia.Game;
           return null;
         });        
       }
+      */
 
       //Elije categorias aleatorias
       public static void handleRoulete(){

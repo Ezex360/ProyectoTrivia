@@ -1,6 +1,6 @@
-package trivia;
+package trivia.model;
 
-import trivia.User;
+import trivia.model.User;
 
 import org.javalite.activejdbc.Base;
 import org.junit.After;
