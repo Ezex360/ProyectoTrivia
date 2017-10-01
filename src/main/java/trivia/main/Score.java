@@ -19,7 +19,7 @@ public class Score {
           		res.redirect("/welcome");
         	//Traigo el id del usuario
         	Integer user_id=req.session().attribute("user_id");
-        	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
         	User u=User.findFirst("id=?",user_id);
         	Base.close();
         	String score=calculateScore(user_id);
@@ -38,7 +38,7 @@ public class Score {
     public static String calculateScore(Integer user_id){        
     	BigDecimal finalScore = BigDecimal.ZERO;
     	try{
-    		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+    		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
     		User u = User.findFirst("id = ?",user_id);
     		//Creo la conexion
     		java.sql.Connection connection = Base.connection();

@@ -24,7 +24,7 @@ public class Login {
 		});
 		//Permite el registro de nuevo usuario
 		post("/register", (req, res) -> {
-			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
 			String usern = req.queryParams("username");
 			String pass = req.queryParams("password");
 			Map map = new HashMap();
@@ -47,7 +47,7 @@ public class Login {
 		});
 		//Permite el ingreso de un usuario al sistema
 		post("/login", (req, res) -> {
-			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
 			Map map = new HashMap();
 			String usern = req.queryParams("username");
 			String pass = req.queryParams("password");

@@ -33,7 +33,7 @@ import trivia.model.Game;
       
       //Genera una pregunta aleatoria no respuesta anteriormente si es posible
       public static Question randomQuest(Integer cat_id,Integer user_id){
-      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+      	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
         List<Question> q = Question.findBySQL("SELECT * FROM questions where (category_id="+cat_id+") and"+
 		" questions.id not in "+
 		"(select question_id from histories join games on (game_id = games.id) "+
@@ -53,7 +53,7 @@ import trivia.model.Game;
 
       //Devuelve una pregunta con un id de parametro
       public static Question questById(Integer id){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
         Question q = Question.findFirst("id = ?", id);
         Base.close();
         return q;
@@ -61,7 +61,7 @@ import trivia.model.Game;
 
       //Retorna el ultimo juego activo, en caso de no existir, crea uno nuevo.
       public static Game lastGame(Integer user_id){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
         Game g;
         List<Game> games  = 
           Game.findBySQL("SELECT * FROM games WHERE(user_id = "+user_id+" AND status = true)");
@@ -77,7 +77,7 @@ import trivia.model.Game;
 
       //Obtiene el juego con id pasada por paremetro.
       public static Game gameBySession(Integer game_id){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
         Game g = Game.findFirst("id = ?", game_id);
         Base.close(); 
         return g;

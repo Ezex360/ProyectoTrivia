@@ -144,7 +144,7 @@ public class FreePlay {
           map.put("lifes",g.getInteger("lifes"));
           if (youWin(g)){ 
             map.put("result","Ganaste :)");
-            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
             g.set("status",false);
             g.save();
             Base.close();     
@@ -167,7 +167,7 @@ public class FreePlay {
           map.put("lifes",lifes);
           if (lifes<=0){
             map.put("result","Perdiste!");
-            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
             g.set("status",false);
             g.save();
             Base.close(); 
@@ -214,7 +214,7 @@ public class FreePlay {
 
       //Verifica si la respuesta a la pregunta en ese juego es correcta y la carga al historial.
       public static boolean answerQuestion(Game g,Question q,Integer res){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
         Boolean ans = q.verificarRespuesta(res);
         boolean fire;
         if (!ans){
@@ -236,7 +236,7 @@ public class FreePlay {
       public static boolean youWin(Game game){
         boolean win = true;
         try{
-          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
           java.sql.Connection connection = Base.connection();
           String query = "select category_id from histories join questions join games on "+
           "(question_id = questions.id and game_id = games.id)"+
@@ -274,7 +274,7 @@ public class FreePlay {
 
       //Verifica si tuvo 3 respuestas correctas consecutivas.
       private static boolean onFire(Integer game_id){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/giache5_trivia", "giache5_proyecto", "felipe");
         Game g = Game.findFirst("id = ?", game_id);
         boolean fire = g.catchingFire();
         Base.close();
