@@ -32,6 +32,13 @@ public class UserTest{
     }
 
     @Test
+    public void validatePrescenceOfPasswords(){
+        User user = new User();
+        user.set("password", "");
+        assertEquals(user.isValid(), false);
+    }
+
+    @Test
     public void validateUniquenessOfUsernames(){
         User u1 = new User();
         u1.set("username", "Eze").save();

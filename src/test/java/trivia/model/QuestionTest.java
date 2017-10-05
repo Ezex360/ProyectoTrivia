@@ -42,4 +42,14 @@ public class QuestionTest{
         assertEquals(question.isValid(), false);
     }
 
+    @Test
+    public void validateUniquenessOfQuestions(){
+        Question q1 = new Question();
+        q1.set("question", "cual es el diametro terrestre?").save();
+        // attempt creating another question with the same question
+        Question q2 = new Question();
+        q2.set("question", "cual es el diametro terrestre?").save();
+        assertEquals(q2.isValid(), false);
+    }
+
 }
