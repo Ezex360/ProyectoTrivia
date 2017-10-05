@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><pnml>
+<net id="Net-One" type="P/T net">
+<token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<place id="Base de Datos">
+<graphics>
+<position x="465.0" y="570.0"/>
+</graphics>
+<name>
+<value>Base de Datos</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Player_1">
+<graphics>
+<position x="105.0" y="60.0"/>
+</graphics>
+<name>
+<value>Player_1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Player_2">
+<graphics>
+<position x="720.0" y="75.0"/>
+</graphics>
+<name>
+<value>Player_2</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Pregunta respondida_1">
+<graphics>
+<position x="255.0" y="180.0"/>
+</graphics>
+<name>
+<value>Pregunta respondida_1</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Pregunta respondida_2">
+<graphics>
+<position x="555.0" y="180.0"/>
+</graphics>
+<name>
+<value>Pregunta respondida_2</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Preguntas disponibles">
+<graphics>
+<position x="390.0" y="15.0"/>
+</graphics>
+<name>
+<value>Preguntas disponibles</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="respuestas correctas">
+<graphics>
+<position x="405.0" y="225.0"/>
+</graphics>
+<name>
+<value>respuestas correctas</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<transition id="responder correctamente">
+<graphics>
+<position x="150.0" y="330.0"/>
+</graphics>
+<name>
+<value>responder correctamente</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="responder correctamente_2">
+<graphics>
+<position x="660.0" y="330.0"/>
+</graphics>
+<name>
+<value>responder correctamente_2</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="responder incorrectamente">
+<graphics>
+<position x="285.0" y="360.0"/>
+</graphics>
+<name>
+<value>responder incorrectamente</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="responder incorrectamente_2">
+<graphics>
+<position x="495.0" y="360.0"/>
+</graphics>
+<name>
+<value>responder incorrectamente_2</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="responder pregunta">
+<graphics>
+<position x="255.0" y="105.0"/>
+</graphics>
+<name>
+<value>responder pregunta</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<transition id="responer pregunta">
+<graphics>
+<position x="555.0" y="105.0"/>
+</graphics>
+<name>
+<value>responer pregunta</value>
+<graphics>
+<offset x="-5.0" y="35.0"/>
+</graphics>
+</name>
+<orientation>
+<value>90</value>
+</orientation>
+<rate>
+<value>1.0</value>
+</rate>
+<timed>
+<value>false</value>
+</timed>
+<infiniteServer>
+<value>false</value>
+</infiniteServer>
+<priority>
+<value>1</value>
+</priority>
+</transition>
+<arc id="Player_1 to responder pregunta" source="Player_1" target="responder pregunta">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="131" y="76" curvePoint="false"/>
+<arcpath id="001" x="251" y="117" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Player_2 to responer pregunta" source="Player_2" target="responer pregunta">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="717" y="90" curvePoint="false"/>
+<arcpath id="001" x="581" y="117" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Pregunta respondida_1 to responder correctamente" source="Pregunta respondida_1" target="responder correctamente">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="258" y="204" curvePoint="false"/>
+<arcpath id="001" x="166" y="337" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Pregunta respondida_1 to responder incorrectamente" source="Pregunta respondida_1" target="responder incorrectamente">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="269" y="206" curvePoint="false"/>
+<arcpath id="001" x="291" y="366" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Pregunta respondida_2 to responder correctamente_2" source="Pregunta respondida_2" target="responder correctamente_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="575" y="204" curvePoint="false"/>
+<arcpath id="001" x="666" y="336" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Pregunta respondida_2 to responder incorrectamente_2" source="Pregunta respondida_2" target="responder incorrectamente_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="562" y="206" curvePoint="false"/>
+<arcpath id="001" x="511" y="367" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Preguntas disponibles to responder pregunta" source="Preguntas disponibles" target="responder pregunta">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="389" y="34" curvePoint="false"/>
+<arcpath id="001" x="266" y="111" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Preguntas disponibles to responer pregunta" source="Preguntas disponibles" target="responer pregunta">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="414" y="34" curvePoint="false"/>
+<arcpath id="001" x="551" y="117" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="responder correctamente_2 to Base de Datos" source="responder correctamente_2" target="Base de Datos">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="671" y="346" curvePoint="false"/>
+<arcpath id="001" x="486" y="570" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="responder correctamente_2 to Player_2" source="responder correctamente_2" target="Player_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="676" y="337" curvePoint="false"/>
+<arcpath id="001" x="728" y="101" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="responder correctamente to Base de Datos" source="responder correctamente" target="Base de Datos">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="161" y="346" curvePoint="false"/>
+<arcpath id="001" x="222" y="582" curvePoint="false"/>
+<arcpath id="002" x="462" y="582" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="responder correctamente to Player_1" source="responder correctamente" target="Player_1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="156" y="336" curvePoint="false"/>
+<arcpath id="001" x="119" y="86" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="responder incorrectamente_2 to Base de Datos" source="responder incorrectamente_2" target="Base de Datos">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="506" y="376" curvePoint="false"/>
+<arcpath id="001" x="479" y="567" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="responder incorrectamente_2 to Player_1" source="responder incorrectamente_2" target="Player_1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="491" y="372" curvePoint="false"/>
+<arcpath id="001" x="312" y="417" curvePoint="false"/>
+<arcpath id="002" x="117" y="417" curvePoint="false"/>
+<arcpath id="003" x="117" y="87" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="responder incorrectamente to Base de Datos" source="responder incorrectamente" target="Base de Datos">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="301" y="377" curvePoint="false"/>
+<arcpath id="001" x="312" y="582" curvePoint="false"/>
+<arcpath id="002" x="462" y="582" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="responder incorrectamente to Player_2" source="responder incorrectamente" target="Player_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="311" y="372" curvePoint="false"/>
+<arcpath id="001" x="507" y="417" curvePoint="false"/>
+<arcpath id="002" x="732" y="417" curvePoint="false"/>
+<arcpath id="003" x="732" y="102" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="responder pregunta to Pregunta respondida_1" source="responder pregunta" target="Pregunta respondida_1">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="266" y="121" curvePoint="false"/>
+<arcpath id="001" x="266" y="177" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="responer pregunta to Pregunta respondida_2" source="responer pregunta" target="Pregunta respondida_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="566" y="121" curvePoint="false"/>
+<arcpath id="001" x="566" y="177" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="respuestas correctas to responder correctamente" source="respuestas correctas" target="responder correctamente">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="403" y="243" curvePoint="false"/>
+<arcpath id="001" x="176" y="342" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="respuestas correctas to responder correctamente_2" source="respuestas correctas" target="responder correctamente_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="430" y="243" curvePoint="false"/>
+<arcpath id="001" x="656" y="342" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="respuestas correctas to responder incorrectamente" source="respuestas correctas" target="responder incorrectamente">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="407" y="248" curvePoint="false"/>
+<arcpath id="001" x="301" y="367" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="respuestas correctas to responder incorrectamente_2" source="respuestas correctas" target="responder incorrectamente_2">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="425" y="249" curvePoint="false"/>
+<arcpath id="001" x="501" y="366" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+</net>
+</pnml>
