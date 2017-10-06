@@ -4,6 +4,8 @@ import trivia.model.User;
 import org.javalite.activejdbc.Base;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.LinkedList;
 import java.math.BigDecimal;
 import java.sql.*;
 import static spark.Spark.*;
@@ -19,9 +21,9 @@ public class Score {
           		res.redirect("/welcome");
         	//Traigo el id del usuario
         	Integer user_id=req.session().attribute("user_id");
-        	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        	//Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         	User u=User.findFirst("id=?",user_id);
-        	Base.close();
+        	//Base.close();
         	String score=calculateScore(user_id);
         	Map map=new HashMap();
         	map.put("user_score",score);
@@ -38,13 +40,12 @@ public class Score {
     public static String calculateScore(Integer user_id){        
     	BigDecimal finalScore = BigDecimal.ZERO;
     	try{
-    		Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+    		//Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
     		User u = User.findFirst("id = ?",user_id);
     		//Creo la conexion
     		java.sql.Connection connection = Base.connection();
     		//Query del conteo de correctas.
-    		String cantCorrectas = "select count(isCorrect) from histories where "+
-    		"(user_id = "+user_id+" and isCorrect = true) group by user_id";
+    		String cantCorrectas = "select count(isCorrect) from histories where "+"(user_id = "+user_id+" and isCorrect = true) group by user_id";
     		Statement st1 = connection.createStatement();
     		ResultSet resultSet1 =st1.executeQuery(cantCorrectas);
     		BigDecimal correctas = BigDecimal.ZERO;
@@ -73,12 +74,27 @@ public class Score {
 	       			u.save();
 	      		}         
       		}
-          	Base.close();
+          	//Base.close();
         } 
         catch(SQLException sqle) {
         	sqle.printStackTrace();
         	System.err.println("Error connecting: " + sqle);
         }; 
         return finalScore.toString();
-	}  
+	}
+
+    public static void showRanking(){
+       get("/ranking", (req, res) -> {
+            Map map = new HashMap();
+            ////Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+            List<User> list = User.findBySQL("select * from users order by score desc limit 10");
+            List<DataUser> ranking=new LinkedList<>();
+            for(int i=0;i<list.size();i++)
+                ranking.add(new DataUser((String)list.get(i).get("username"),(String)list.get(i).get("score")));
+            map.put("ranking",ranking);
+            ////Base.close(); 
+            return new MustacheTemplateEngine().render(
+            new ModelAndView(map, "ranking.mustache"));
+        });
+    }
 }

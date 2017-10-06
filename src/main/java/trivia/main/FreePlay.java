@@ -11,8 +11,6 @@ import java.util.Map;
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
 
-import trivia.model.User;
-import trivia.model.Category;
 import trivia.model.Question;
 import trivia.model.History;
 import trivia.model.Game;
@@ -144,10 +142,10 @@ public class FreePlay {
           map.put("lifes",g.getInteger("lifes"));
           if (youWin(g)){ 
             map.put("result","Ganaste :)");
-            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+            //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
             g.set("status",false);
             g.save();
-            Base.close();     
+            //Base.close();     
             return new MustacheTemplateEngine().render(
               new ModelAndView(map, "winnerOrLosser.mustache")
             );
@@ -167,10 +165,10 @@ public class FreePlay {
           map.put("lifes",lifes);
           if (lifes<=0){
             map.put("result","Perdiste!");
-            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+            //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
             g.set("status",false);
             g.save();
-            Base.close(); 
+            //Base.close(); 
             return new MustacheTemplateEngine().render(
               new ModelAndView(map, "winnerOrLosser.mustache")
             );
@@ -214,7 +212,7 @@ public class FreePlay {
 
       //Verifica si la respuesta a la pregunta en ese juego es correcta y la carga al historial.
       public static boolean answerQuestion(Game g,Question q,Integer res){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         Boolean ans = q.verificarRespuesta(res);
         boolean fire;
         if (!ans){
@@ -229,19 +227,16 @@ public class FreePlay {
         record.set("question_id",q.get("id"));
         record.set("isCorrect",ans);
         record.save();
-        Base.close();
+        //Base.close();
         return ans;
       }  
 
       public static boolean youWin(Game game){
         boolean win = true;
         try{
-          Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+          //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
           java.sql.Connection connection = Base.connection();
-          String query = "select category_id from histories join questions join games on "+
-          "(question_id = questions.id and game_id = games.id)"+
-          " where (histories.user_id ="+game.getInteger("user_id")+
-          " and status = true and isCorrect = true)";
+          String query = "select category_id from histories join questions join games on "+"(question_id = questions.id and game_id = games.id)"+" where (histories.user_id ="+game.getInteger("user_id")+" and status = true and isCorrect = true)";
           Statement st = connection.createStatement();
           st.executeQuery(query); 
           ResultSet resultSet = st.executeQuery(query);
@@ -263,7 +258,7 @@ public class FreePlay {
             }
             count = 0;
           }
-        Base.close();
+        //Base.close();
         } catch(SQLException sqle) {
           sqle.printStackTrace();
           System.err.println("Error connecting: " + sqle);
@@ -274,10 +269,10 @@ public class FreePlay {
 
       //Verifica si tuvo 3 respuestas correctas consecutivas.
       private static boolean onFire(Integer game_id){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         Game g = Game.findFirst("id = ?", game_id);
         boolean fire = g.catchingFire();
-        Base.close();
+        //Base.close();
         return fire;
       }
   

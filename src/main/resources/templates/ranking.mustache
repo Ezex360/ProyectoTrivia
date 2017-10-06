@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <title> Pregunta2 - Ranking </title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+ 
+  </style>
+  <body>
+    <h2 align="center">Top 10</h2>
+    <div class="center">
+      <table>
+        <tr>
+          <th>Usuario</th>
+          <th>Puntaje</th>  
+        </tr>
+        {{#ranking}}
+          <tr>
+            <td><b>{{username}}</b></td>
+            <td>{{score}}%</td>
+          </tr>
+        {{/ranking}}
+      </table>
+    </div>
+    <ul class="menu">
+      <li><a href="/menu">Volver al menu principal</a></li>
+    </ul>
+  </body>
+</html>
