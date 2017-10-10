@@ -1,10 +1,6 @@
 package trivia.main;
 
-import trivia.model.User;
 import trivia.model.Game;
-import org.javalite.activejdbc.Base;
-import java.util.HashMap;
-import java.util.Map;
 import static spark.Spark.*;
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
@@ -27,6 +23,7 @@ public class Menu {
           String value1 = req.queryParams("option1");
           String value2 = req.queryParams("option2");
           String value3 = req.queryParams("option3");
+          String value4 = req.queryParams("option4");
           //Ingresa al juego
           if (value1 != null){
             Integer user_id = req.session().attribute("user_id");
@@ -39,6 +36,9 @@ public class Menu {
             res.redirect("/score");
           //Vuelve a la pagina de inicio
           else if (value3 != null){
+            res.redirect("/ranking");
+          }
+          else if (value4 != null){
             req.session().removeAttribute("user_id");
             res.redirect("/welcome");
           }
