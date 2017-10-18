@@ -28,9 +28,9 @@ public class QuestionTest{
     @Test
     public void validatePresenceOf(){
         Question question = new Question();
-        question.set("question", "Cual es la diferencia entre una piedra y un bebe?");
-        question.set("answer1", "La piedra no llora cuando la patean");
-        question.set("answer2", "El bebe no esta re duro");
+        question.set("question", "Cual es el nombre del perro mas inteligente del mundo?");
+        question.set("answer1", "Felipe");
+        question.set("answer2", "Alberto");
         question.set("rightans", 1);
         assertEquals(question.isValid(), true);
     }
