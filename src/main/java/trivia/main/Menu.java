@@ -24,6 +24,7 @@ public class Menu {
           String value2 = req.queryParams("option2");
           String value3 = req.queryParams("option3");
           String value4 = req.queryParams("option4");
+          String value5 = req.queryParams("option5");
           //Ingresa al juego
           if (value1 != null){
             Integer user_id = req.session().attribute("user_id");
@@ -31,19 +32,54 @@ public class Menu {
             req.session().attribute("game_id",game.getInteger("id"));
             res.redirect("/ruleta");
           }
-          //Consulta el puntaje
+          //Mueve al menu de multijugador
           else if (value2 != null)
+            res.redirect("/multiplayermenu");
+          //Consulta el puntaje
+          else if (value3 != null)
             res.redirect("/score");
-          //Vuelve a la pagina de inicio
-          else if (value3 != null){
+          //Ingresa al ranking
+          else if (value4 != null){
             res.redirect("/ranking");
           }
-          else if (value4 != null){
+          //Vuelve a la pagina de inicio
+          else if (value5 != null){
             req.session().removeAttribute("user_id");
             res.redirect("/welcome");
           }
           return null;
         });        
+        get("/multiplayermenu", (req,res)-> {
+          if (req.session().attribute("user_id") == null)
+            res.redirect("/welcome"); 
+          return new MustacheTemplateEngine().render(
+            new ModelAndView(null, "twoplayersmenu.mustache")
+          );
+
+        });
+        post("/multiplayermenu", (req,res)-> {
+          if (req.session().attribute("user_id") == null)
+            res.redirect("/welcome");
+          String value1 = req.queryParams("option1");
+          String value2 = req.queryParams("option2");
+          String value3 = req.queryParams("option3");
+          //Ingresa al juego modo battalla
+          if (value1 != null){
+            res.redirect("/battlemode");
+          }
+          //Ingresa al juego modo turnos
+          else if (value2 != null)
+            res.redirect("/turnmode");
+          else if (value3 != null){
+            res.redirect("/menu");
+          }
+          return null;
+        });
+
+
+
+
       }
+
 
 }

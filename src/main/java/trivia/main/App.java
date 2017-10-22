@@ -12,7 +12,14 @@ import trivia.model.Game;
 
      public static void main( String[] args ){
         
-        staticFiles.location("/public");
+        //staticFiles.location("/public");
+        String projectDir = System.getProperty("user.dir");
+        String staticDir = "/src/main/resources/public";
+        staticFiles.externalLocation(projectDir + staticDir);
+        staticFiles.expireTime(600);
+        webSocket("/battlesocket", BattlePlayWebSocket.class);
+        init();
+        
         before((req, res)->{
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
         });
@@ -20,6 +27,8 @@ import trivia.model.Game;
         after((req, res) -> {
             Base.close();
         });
+
+
         Login.Welcome();
         Score.showScore();
         Score.showRanking();        
@@ -47,6 +56,14 @@ import trivia.model.Game;
         //Base.close();
 		return quest;
       }
+      //Genera una pregunta aleatoria cualquiera
+      public static Question randomQuest(){
+        //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
+        List<Question> q = Question.findBySQL("SELECT * FROM questions Order by rand() LIMIT 1");
+        //Base.close();
+        return q.get(0);
+      }
+
 
       //Devuelve una pregunta con un id de parametro
       public static Question questById(Integer id){

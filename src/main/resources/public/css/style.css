@@ -174,6 +174,18 @@ textarea {
   src: local('Vampiro One'), local('VampiroOne-Regular'), url(http://themes.googleusercontent.com/static/fonts/vampiroone/v3/Ho2Xld8UbQyBA8XLxF1_NYbN6UDyHWBl620a-IRfuBk.woff) format('woff');
 }
 
+#timer{
+  border: 0;
+  text-align: center;
+  outline: none;
+  margin-top: 40px;
+  border-radius: 0;
+  padding: 15px 0;
+  font-size: 2rem;
+  font-weight: 600;
+  background: #179b77;
+}
+
 /*neon effect*/
 p{
   text-align:center;
