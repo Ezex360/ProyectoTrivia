@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-05-01" view-index="0" gantt-divider-location="233" resource-divider-location="300" version="2.8.5" locale="es_AR">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2017-03-05" view-index="0" gantt-divider-location="233" resource-divider-location="300" version="2.8.5" locale="en_US">
     <description/>
-    <view zooming-state="default:8" id="gantt-chart">
-        <field id="tpd3" name="Nombre" width="112" order="0"/>
-        <field id="tpd4" name="Fecha de inicio" width="54" order="1"/>
-        <field id="tpd5" name="Fecha de fin" width="48" order="2"/>
+    <view zooming-state="default:7" id="gantt-chart">
+        <field id="tpd3" name="Name" width="117" order="0"/>
+        <field id="tpd4" name="Begin date" width="59" order="1"/>
+        <field id="tpd5" name="End date" width="53" order="2"/>
     </view>
     <view id="resource-table">
-        <field id="0" name="Nombre" width="210" order="0"/>
-        <field id="1" name="Función" width="86" order="1"/>
+        <field id="0" name="Name" width="210" order="0"/>
+        <field id="1" name="Default role" width="86" order="1"/>
     </view>
     <!-- -->
     <calendars>
