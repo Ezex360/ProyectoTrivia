@@ -36,6 +36,11 @@ public class BattlePlayWebSocket {
             option = message.substring(3);
         }catch(Exception e){System.err.println("No se coloco opcion");}
         BattlePlay.OnlineGame active = BattlePlay.search(user);
+        if (active == null){
+        	System.out.println("Game not found!");
+        }else{
+        	System.out.println("Game found! ");
+        }
         System.out.println();
         System.out.println(message + "/" + type + "/" + Integer.parseInt(option));
         System.out.println();
@@ -46,7 +51,7 @@ public class BattlePlayWebSocket {
                 active.setRes2(Integer.parseInt(option));
             }else{
                 System.out.println();
-                System.out.println("Anda a tomarte una botella de cloro.");
+                System.out.println("EL JUGADOR NO FORMA PARTE DEL JUEGO");
                 System.out.println();
             }
             Integer whoWin = active.compareAnswers();
@@ -57,10 +62,12 @@ public class BattlePlayWebSocket {
                 BattlePlay.sendResult(active,whoWin);
             }
         }else if(type.equals("qst")){
-            BattlePlay.makeQuestion(active);
+            if(active.active_quest == null){
+                BattlePlay.makeQuestion(active);
+            }
         }else{
             System.out.println();
-            System.out.println("Anda a tomarte una botella de mercurio.");
+            System.out.println("NO SE ENTENDIO EL MENSAJE");
             System.out.println();   
         }
 

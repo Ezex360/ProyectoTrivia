@@ -36,9 +36,14 @@ public class BattlePlay {
     		Session player1 = onHold.poll();
     		Session player2 = onHold.poll();
     		OnlineGame neww = new OnlineGame(player1,player2);
+    		neww.setId(games.size()+1);
+    		games.add(neww);
             System.out.println();
             System.out.println("GAME CREATED;");
             System.out.println();
+    		for(int i=0;i<games.size();i++){
+    			System.out.print("game id: "+games.get(i).getId()+"/");
+    		}
     		makeQuestion(neww);
     	}
     }
@@ -98,8 +103,10 @@ public class BattlePlay {
     }
 
     public static OnlineGame search(Session player){
-    	for (OnlineGame game : games){
-    		if(game.getPlayer1() == player || game.getPlayer2() == player){
+    	System.out.println("Searching in "+games.size()+" Active Games.");
+    	for (int i=0;i<games.size() ;i++) {
+    		OnlineGame game = games.get(i);
+    		if(game.isPlayer1(player) || game.isPlayer2(player)){
     			return game;
     		}
     	}
@@ -107,12 +114,13 @@ public class BattlePlay {
     }
 
 	public static class OnlineGame {
-		private static Session player1;
-		private static Session player2;
-        static Integer res1;
-        static Integer res2;
-		static Question active_quest;
-		static Integer done_questions;
+		public Integer id;
+		private Session player1;
+		private Session player2;
+        public Integer res1;
+        public Integer res2;
+		public Question active_quest;
+		public Integer done_questions;
 
 		public OnlineGame(Session one, Session two){
 			player1 = one;
@@ -123,43 +131,50 @@ public class BattlePlay {
 			done_questions = 0;
 		}
 
-		public static boolean gameEnd(){
+		public void setId(Integer i){
+			id = i;
+		}
+		public Integer getId(){
+			return id;
+		}
+
+		public boolean gameEnd(){
 			return done_questions == 10;
 		}
 
-		public static Session getPlayer1(){
+		public Session getPlayer1(){
 			return player1;
 		}
-		public static Session getPlayer2(){
+		public Session getPlayer2(){
 			return player2;
 		}
-        public static boolean isPlayer1(Session compare){
+        public boolean isPlayer1(Session compare){
             return player1 == compare;
         }
-        public static boolean isPlayer2(Session compare){
+        public boolean isPlayer2(Session compare){
             return player2 == compare;
         }
 
-		public static void setQuestion(Question q){
+		public void setQuestion(Question q){
 			active_quest = q;
 		}
 
-        public static void setRes1(Integer r){
+        public void setRes1(Integer r){
             res1 = r;
         }
-        public static void setRes2(Integer r){
+        public void setRes2(Integer r){
             res2 = r;
         }
 
 
-        public static boolean connected(){
+        public boolean connected(){
             boolean one = player1 != null;
             boolean two = player2 != null;
             return one && two;
             
         }
 
-		public static Integer compareAnswers(){
+		public Integer compareAnswers(){
             System.out.println("res1 = "+res1);
             System.out.println("res2 = "+res2);
             if (res1==0 || res2==0)
