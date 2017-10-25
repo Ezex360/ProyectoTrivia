@@ -7,6 +7,8 @@ import java.util.Map;
 import static spark.Spark.*;
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
+import trivia.model.Utilidades;
+
 
 public class Login {
 	
@@ -26,7 +28,8 @@ public class Login {
 		post("/register", (req, res) -> {
 			//Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/trivia", "proyecto", "felipe");
 			String usern = req.queryParams("username");
-			String pass = req.queryParams("password");
+			String passwithoutEncryption = req.queryParams("password");
+			String pass = Utilidades.Encriptar(passwithoutEncryption);
 			Map map = new HashMap();
 
 			Long repetido = User.count("username = ?",usern);
@@ -52,9 +55,14 @@ public class Login {
 			String usern = req.queryParams("username");
 			String pass = req.queryParams("password");
 			User user = User.findFirst("username = ?", usern);
+			String passWithEncryption="";
+			String passwithoutEncryption="";
 			//Base.close();
 			if (user != null)
-				if (pass.equals(user.getString("password"))){
+				passWithEncryption = user.getString("password");
+				System.out.println(passWithEncryption);
+				passwithoutEncryption = Utilidades.Desencriptar(passWithEncryption);
+				if (pass.equals(passwithoutEncryption)){
 					req.session(true);
 					req.session().attribute("user_id",user.getInteger("id"));  
 					res.redirect("/menu");
