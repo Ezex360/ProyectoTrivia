@@ -65,7 +65,7 @@ public class Menu {
           String value3 = req.queryParams("option3");
           //Ingresa al juego modo battalla
           if (value1 != null){
-            res.redirect("/battlemode");
+            res.redirect("/battlemode.html");
           }
           //Ingresa al juego modo turnos
           else if (value2 != null)
