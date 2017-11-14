@@ -102,6 +102,31 @@ public class BattlePlay {
         }
     }
 
+    public static void sendEnd(OnlineGame active, Integer res1, Integer res2){
+        String message;
+        if(res1 > res2){
+            message = "El jugador 1 Gano la partida";
+        } else if(res2 < res1){
+            message = "El jugador 2 Gano la partida";
+        } else if(res1 == res2){
+            message = "Empate!.";
+        } else {
+            message = "Hubo un error obteniendo el resultado :c";
+        }
+        try {
+            active.getPlayer1().getRemote().sendString(String.valueOf(new JSONObject()
+                .put("type","3")
+                .put("result",message)
+            ));
+            active.getPlayer2().getRemote().sendString(String.valueOf(new JSONObject()
+                .put("type","3")
+                .put("result",message)
+            ));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static OnlineGame search(Session player){
     	System.out.println("Searching in "+games.size()+" Active Games.");
     	for (int i=0;i<games.size() ;i++) {
@@ -115,8 +140,11 @@ public class BattlePlay {
 
 	public static class OnlineGame {
 		public Integer id;
+        private boolean playing;
 		private Session player1;
 		private Session player2;
+        private Integer correctsPlayer1;
+        private Integer correctsPlayer2;
         public Integer res1;
         public Integer res2;
 		public Question active_quest;
@@ -125,6 +153,8 @@ public class BattlePlay {
 		public OnlineGame(Session one, Session two){
 			player1 = one;
 			player2 = two;
+            correctsPlayer1 = 0;
+            correctsPlayer2 = 0;
             res1 = 0;
             res2 = 0;
 			active_quest = null;
@@ -139,7 +169,7 @@ public class BattlePlay {
 		}
 
 		public boolean gameEnd(){
-			return done_questions == 10;
+			return done_questions == 5;
 		}
 
 		public Session getPlayer1(){
@@ -155,9 +185,20 @@ public class BattlePlay {
             return player2 == compare;
         }
 
+        public Integer getCorrects1(){
+            return correctsPlayer1;
+        }
+        public Integer getCorrects2(){
+            return correctsPlayer2;
+        }
+
 		public void setQuestion(Question q){
-			active_quest = q;
+            active_quest = q;
 		}
+
+        public boolean haveQuestion(){
+            return playing == true;
+        }
 
         public void setRes1(Integer r){
             res1 = r;
@@ -187,12 +228,16 @@ public class BattlePlay {
                 res2=0;
     			active_quest = null;
     			if(ans1 && !ans2){
+                    correctsPlayer1++;
     				return 1;
     			} else if (ans2 && !ans1){
+                    correctsPlayer2++;
     				return 2;
     			} else if(!ans1 && !ans2) {
     				return 3;
     			}else{
+                    correctsPlayer1++;
+                    correctsPlayer2++;
                     return 4;
                 }
             }

@@ -58,11 +58,13 @@ public class BattlePlayWebSocket {
             System.out.println();
             System.out.println(whoWin);
             System.out.println();
-            if(whoWin!=0){
+            if(active.gameEnd()){
+                BattlePlay.sendEnd(active,active.getCorrects1(),active.getCorrects2());
+            }else if(whoWin!=0){
                 BattlePlay.sendResult(active,whoWin);
             }
         }else if(type.equals("qst")){
-            if(active.active_quest == null){
+            if(active.isPlayer1(user)){
                 BattlePlay.makeQuestion(active);
             }
         }else{

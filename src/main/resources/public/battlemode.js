@@ -30,7 +30,7 @@ function makeQuestion(data){
 	"value='"+data.option3+"' id=\"3\" onclick=\"getAnswer(this.id)\">"
 	id("options").innerHTML+="<input class=\"button\" type=\"submit\""+
 	"value='"+data.option4+"' id=\"4\" onclick=\"getAnswer(this.id)\">"
-	timeLeft = 15;
+	timeLeft = 10;
 	timerId = setInterval(countdown, 1000);
 	instance++;
 }
@@ -45,15 +45,26 @@ function showResult(data){
 	console.log(data.result);
 }
 
+function showEnd(data){
+	showMessage(data.result);
+	console.log(data.result);
+}
+
+
+
 function update(msg){
 	showMessage("Cargando...");
 	var data = JSON.parse(msg.data);
 	if(data.type == "1"){
 		makeQuestion(data);
+		console.log('-+-+-+ Preguntando -+-+-+');
 	}
 	else if(data.type == "2"){
 		showResult(data);
 		setTimeout( function (){webSocket.send("qst0");},1500);
+	}else if(data.type == "3"){
+		showEnd(data);
+		setTimeout( function (){alert("Deberias irte")},3000);
 	}else{
 		console.log('Tipo no identificado');
 	}
